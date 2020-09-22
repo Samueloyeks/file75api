@@ -15,11 +15,11 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, 'Please provide a valid email'],
   },
-  phone: {
-    type: String,
-    required: [true, 'Please provide your phone Number'],
-    unique: true,
-  },
+  // phone: {
+  //   type: String,
+  //   required: [true, 'Please provide your phone Number'],
+  //   unique: true,
+  // },
   role: {
     type: String,
     enum: ['admin', 'user'],

@@ -6,7 +6,7 @@ exports.createUser = async (req) => {
   return await User.create({
     fullName: req.fullName,
     email: req.email,
-    phone: req.phone,
+    // phone: req.phone,
     type: req.type,
     role: req.role,
     slug: req.slug,
