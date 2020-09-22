@@ -5,27 +5,34 @@ const Email = require('../../utils/email');
 const userService = require('../../Services/User');
 
 exports.getMe = (req, res, next) => {
-  req.params.id = req.user.id; 
+  req.params.id = req.user.id;
   next();
 };
 
 exports.getUser = (req, res, next) =>
   userService.getUserDefault(req, res, next);
 
-exports.signup = catchAsync(async (req, res) => {
+exports.signup = catchAsync(async (req, res,next) => {
   req.body.type = 'email';
   req.body.slug =
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15);
+
+  const { email } = req.body;
+  const user = await userService.getUser({ email }, true);
+
+  if (user) {
+    return next(new AppError('Email has been registered', 409));
+  }
+
   const newUser = await userService.createUser(req.body);
 
-  const url = `${req.protocol}://${req.get('host')}/api/v1/verify/${
-    req.body.slug
-  }`;
+  const url = `${req.protocol}://${req.get('host')}/api/v1/verify/${req.body.slug
+    }`;
   await new Email(newUser, url).welcome();
 
   return userService.createSendToken(newUser, 201, res);
-}); 
+});
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
@@ -51,7 +58,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(new AppError('There is no user with email address.', 404));
   }
- 
+
   // 2) Generate the random reset token
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
