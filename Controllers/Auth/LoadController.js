@@ -18,12 +18,12 @@ exports.signup = catchAsync(async (req, res,next) => {
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15);
 
-  const { email } = req.body;
-  const user = await userService.getUser({ email }, true);
+  // const { email } = req.body;
+  // const user = await userService.getUser({ email }, true);
 
-  if (user) {
-    return next(new AppError('Email has been registered', 409));
-  }
+  // if (user) {
+  //   return next(new AppError('Email has been registered', 409));
+  // }
 
   const newUser = await userService.createUser(req.body);
 
