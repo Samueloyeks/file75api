@@ -4,6 +4,8 @@ const AppError = require('../../utils/appError');
 const Email = require('../../utils/email');
 const userService = require('../../Services/User');
 
+
+
 exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
@@ -12,18 +14,18 @@ exports.getMe = (req, res, next) => {
 exports.getUser = (req, res, next) =>
   userService.getUserDefault(req, res, next);
 
-exports.signup = catchAsync(async (req, res,next) => {
+exports.signup = catchAsync(async (req, res, next) => {
   req.body.type = 'email';
   req.body.slug =
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15);
 
-  // const { email } = req.body;
-  // const user = await userService.getUser({ email }, true);
+  const { email } = req.body;
+  const user = await userService.getUser({ email }, true);
 
-  // if (user) {
-  //   return next(new AppError('Email has been registered', 409));
-  // }
+  if (user) {
+    return next(new AppError('Email has been registered', 409));
+  }
 
   const newUser = await userService.createUser(req.body);
 
@@ -51,6 +53,10 @@ exports.login = catchAsync(async (req, res, next) => {
   // 3) If everything ok, send token to client
   return userService.createSendToken(user, 200, res);
 });
+
+exports.facebook = catchAsync(async (req, res, next) => {
+  
+})
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on POSTed email
