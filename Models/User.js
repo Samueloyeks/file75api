@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
   userToken: String,
   type: {
     type: String,
-    enum: ['email'],
+    enum: ['email','facebook','google'],
     default: 'email',
   },
   slug: {

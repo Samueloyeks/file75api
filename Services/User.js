@@ -39,26 +39,26 @@ exports.verify = async (slug) => {
   );
 };
 
-exports.facebookAuth =  (req, res, next) => {
-  passport.use('facebookToken', new FacebookTokenStrategy({
-    clientID: process.env.FACEBOOK_CLIENT_ID,
-    clientSecret: process.env.FACEBOOK_CLIENT_SECRET
-  }, async (accessToken, refreshToken, profile, done) => {
-    try {
-      if (await User.findOne({ 'facebook_id': profile.id })) return console.log('this account is already registered!')
-      const email = profile.emails[0].value;
-      const { id: facebook_id, displayName: fullName } = profile;
-      const user = await User.create({
-        email, facebook_id, fullName
-      })
-      await user.save();
+// exports.facebookAuth =  (req, res, next) => {
+//   passport.use('facebookToken', new FacebookTokenStrategy({
+//     clientID: process.env.FACEBOOK_CLIENT_ID,
+//     clientSecret: process.env.FACEBOOK_CLIENT_SECRET
+//   }, async (accessToken, refreshToken, profile, done) => {
+//     try {
+//       if (await User.findOne({ 'facebook_id': profile.id })) return console.log('this account is already registered!')
+//       const email = profile.emails[0].value;
+//       const { id: facebook_id, displayName: fullName } = profile;
+//       const user = await User.create({
+//         email, facebook_id, fullName
+//       })
+//       await user.save();
  
-      console.log(user)
-    } catch (error) {
-      done(error, false, error.message)
-    }
-  }));
-}
+//       console.log(user)
+//     } catch (error) {
+//       done(error, false, error.message)
+//     }
+//   }));
+// }
 
 const signToken = (id) => {
   /**
