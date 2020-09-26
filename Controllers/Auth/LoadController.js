@@ -55,7 +55,7 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.facebookAuth = catchAsync(async (req, res, next) => {
-  const { fullName, email, password } = req.body;
+  const { email, password } = req.body;
 
   if (!email || !password) {
     return next(new AppError('Please provide email and password!', 400));
@@ -63,7 +63,13 @@ exports.facebookAuth = catchAsync(async (req, res, next) => {
   // 2) Check if user exists && password is correct
   const user = await userService.getUser({ email }, true);
 
+
+
   if (user) {
+    if (!(await user.correctPassword(password, user.password))) {
+      return next(new AppError('Incorrect email or password', 401));
+    }
+
     return userService.createSendToken(user, 200, res);
   }
 
@@ -80,15 +86,38 @@ exports.facebookAuth = catchAsync(async (req, res, next) => {
 
   return userService.createSendToken(newUser, 201, res);
 
-  // if (await User.findOne({ 'email': email })) return console.log('this account is already registered!')
-  // const email = profile.emails[0].value;
-  // const { id: facebook_id, displayName: fullName } = profile;
-  // const user = await User.create({
-  //   email, facebook_id, fullName
-  // })
-  // await user.save();
+})
 
-  // console.log(user)
+exports.googleAuth = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return next(new AppError('Please provide email and password!', 400));
+  }
+  // 2) Check if user exists && password is correct
+  const user = await userService.getUser({ email }, true);
+
+
+  if (user) {
+    if (!(await user.correctPassword(password, user.password))) {
+      return next(new AppError('Incorrect email or password', 401));
+    }
+
+    return userService.createSendToken(user, 200, res);
+  }
+
+  req.body.type = 'google';
+  req.body.slug =
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15);
+
+  const newUser = await userService.createUser(req.body);
+
+  const url = `${req.protocol}://${req.get('host')}/api/v1/verify/${req.body.slug
+    }`;
+  await new Email(newUser, url).welcome();
+
+  return userService.createSendToken(newUser, 201, res);
 
 })
 
