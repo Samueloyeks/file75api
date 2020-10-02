@@ -11,7 +11,7 @@ router.get('/verify/:token', authController.verify);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 router.post('/auth/facebook', authController.facebookAuth);
-router.post('/auth/google', authController.googleAuth);
+router.post('/auth/google', authController.googleAuth); 
 
 
 //For Admin Creation

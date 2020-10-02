@@ -10,7 +10,7 @@ exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
 };
-
+ 
 exports.getUser = (req, res, next) =>
   userService.getUserDefault(req, res, next);
 

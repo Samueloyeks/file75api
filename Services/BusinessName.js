@@ -8,6 +8,8 @@ exports.createBusinessName = async (req) => {
         companyName1: req.companyName1,
         companyName2: req.companyName2,
         phone: req.phone,
+        charge:req.charge,
+        email:req.email,
         userId:req.userId
     });
 };
