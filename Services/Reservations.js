@@ -14,9 +14,9 @@ exports.createReservation = async (req) => {
         phone: req.phone,
         charge: req.charge,
         email: req.email,
-        userId: req.userId,
+        user: req.user,
         status: req.status,
-        category_id: req.category_id,
+        category: req.category,
         submitted: req.submitted,
         expires: req.expires,
         viewed: req.viewed
@@ -47,7 +47,7 @@ exports.getAllReservations = async (req) => {
     const skip = parseInt((page - 1) * perPage);
     const pageLimit = parseInt(perPage)
 
-    if (byUserId) query = query.find({ "userId": byUserId });
+    if (byUserId) query = query.find({ "user": byUserId });
 
     if (associations.length > 0) {
         for (const association of associations) {
@@ -64,7 +64,7 @@ exports.getAllReservations = async (req) => {
     if (byCategorycode) {
         const category = await ServiceCategories.find({ "code": byCategorycode });
         const categoryId = category[0]._id;
-        query = query.find({ "category_id": categoryId });
+        query = query.find({ "category": categoryId });
     }
 
     if (search) query = query.find({ $text: { $search: search } });

@@ -28,7 +28,7 @@ const ReservationSchema = new Schema({
         lowercase: true,
         validate: [validator.isEmail, 'Please provide a valid email'],
     },
-    userId: {
+    user: {
         type: String,
         required: [true, 'Please provide user id'],
     },
@@ -37,7 +37,7 @@ const ReservationSchema = new Schema({
         ref: 'SubmissionStatuses',
         required: true
     },
-    category_id: {
+    category: {
         type: Schema.ObjectId,
         ref: 'ServiceCategories',
         required: true

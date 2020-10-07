@@ -9,9 +9,8 @@ exports.createTransaction = async (req) => {
         provider: req.provider,
         reference: req.reference,
         status: req.status,
-        userId: req.userId,
-        service: req.service,
-        serviceId: req.serviceId
+        user: req.user,
+        service: req.service
     });
 };
 

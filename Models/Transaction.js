@@ -17,17 +17,13 @@ const TransactionSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please provide payment status'],
     },
-    userId: {
+    user: {
         type: String,
         required: [true, 'Please provide user id'],
     },
     service: {
         type: String,
         required: [true, 'Please provide a service'],
-    },
-    serviceId: {
-        type: String,
-        required: [true, 'Please provide service id'],
     },
     created_at: {
         type: Date,

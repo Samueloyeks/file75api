@@ -41,9 +41,9 @@ exports.store = catchAsync(async (req, res, next) => {
   });
 
 
-  req.body.userId = user._id;
+  req.body.user = user._id;
   req.body.status = status._id;
-  req.body.category_id = category._id;
+  req.body.category = category._id;
 
   var date = new Date();
   req.body.submitted = Date.now();
@@ -54,9 +54,8 @@ exports.store = catchAsync(async (req, res, next) => {
   req.body.transactionData = null;
   const newreservation = await reservationService.createReservation(req.body);
 
-  TransactionData.userId = user._id;
-  TransactionData.service = 'name_rsv';
-  TransactionData.serviceId = newreservation._id;
+  TransactionData.user = user._id;
+  TransactionData.service = newreservation._id;
 
   req.body = TransactionData;
 

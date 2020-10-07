@@ -63,12 +63,12 @@ const data = [
                 'description': 'Reserve your business name',
             },
             {
-                'code': 'bus_reg',
+                'code': 'business_reg',
                 'category': 'Business Registration',
                 'description': 'Complete registration process for your business',
             },
             {
-                'code': 'comp_reg',
+                'code': 'company_reg',
                 'category': 'Company Registration',
                 'description': 'Complete registration process for your company',
             },
