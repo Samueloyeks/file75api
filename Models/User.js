@@ -2,6 +2,8 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const mongoosePaginate = require('mongoose-paginate-v2');
+
 
 const userSchema = new mongoose.Schema({
   fullName: {
@@ -63,6 +65,8 @@ const userSchema = new mongoose.Schema({
     select: false,
   },
 });
+userSchema.plugin(mongoosePaginate);
+
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();

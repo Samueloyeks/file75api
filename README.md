@@ -1,10 +1,9 @@
-The Node(express) Version of Boiler Plate API 
+The Node(express) API for file.ng
 1. git clone repo
-2. Create new branch
-2. npm install
-3. Make changes, commit and push.
-4. Create PR to dev
-5. 😉everyone is ok.
+2. run "npm install"
+3. run "npm run seed"
+4. run "nodemon server.js"
+5. 😉server is now running.
 
 
-🎉Congrats you just contributed to the repo
+s

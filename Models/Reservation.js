@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
+const Schema = require('mongoose').Schema;
 const validator = require('validator');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 
-const BusinessNameSchema = new mongoose.Schema({
+
+const ReservationSchema = new Schema({
     companyName1: {
         type: String,
         required: [true, 'Please provide company name!'],
@@ -24,11 +27,24 @@ const BusinessNameSchema = new mongoose.Schema({
         required: [true, 'Please provide user email'],
         lowercase: true,
         validate: [validator.isEmail, 'Please provide a valid email'],
-      },
+    },
     userId: {
         type: String,
         required: [true, 'Please provide user id'],
     },
+    status: {
+        type: Schema.ObjectId,
+        ref: 'SubmissionStatuses',
+        required: true
+    },
+    category_id: {
+        type: Schema.ObjectId,
+        ref: 'ServiceCategories',
+        required: true
+    },
+    submitted:Date,
+    expires:Date,
+    viewed:Boolean,
     created_at: {
         type: Date,
         default: Date.now,
@@ -37,9 +53,12 @@ const BusinessNameSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     }
-});
+}, { collection: 'reservations' });
+ReservationSchema.index({ 'companyName1': 'text', 'companyName2': 'text', 'email': 'text' });
+ReservationSchema.plugin(mongoosePaginate);
 
 
-const BusinessName = mongoose.model('BusinessName', BusinessNameSchema);
 
-module.exports = BusinessName;
+const Reservation = mongoose.model('Reservation', ReservationSchema);
+
+module.exports = Reservation;
