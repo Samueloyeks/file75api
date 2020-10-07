@@ -17,9 +17,9 @@ exports.createReservation = async (req) => {
         userId: req.userId,
         status: req.status,
         category_id: req.category_id,
-        submitted:req.submitted,
-        expires:req.expires,
-        viewed:req.viewed
+        submitted: req.submitted,
+        expires: req.expires,
+        viewed: req.viewed
     });
 };
 
@@ -48,6 +48,12 @@ exports.getAllReservations = async (req) => {
     const pageLimit = parseInt(perPage)
 
     if (byUserId) query = query.find({ "userId": byUserId });
+
+    if (associations.length > 0) {
+        for (const association of associations) {
+            query = query.populate(association)
+        }
+    }
 
     if (byStatusCode) {
         const status = await SubmissionStatuses.find({ "code": byStatusCode });
