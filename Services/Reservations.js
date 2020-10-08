@@ -70,7 +70,7 @@ exports.getAllReservations = async (req) => {
 
     if (search) query = query.find({ $text: { $search: search } });
 
-    return await query.skip(skip).limit(pageLimit);
+    return await query.skip(skip).sort( [['_id', -1]] ).limit(pageLimit);
 };
 
 exports.byUser = async (userId) => {
