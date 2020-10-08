@@ -49,8 +49,9 @@ exports.getAllReservations = async (req) => {
 
     if (byUserId) query = query.find({ "user": byUserId });
 
+
     if (associations.length > 0) {
-        for (const association of associations) {
+        for (const association of associations.split(',')) {
             query = query.populate(association)
         }
     }
