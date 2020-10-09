@@ -32,7 +32,7 @@ exports.store = catchAsync(async (req, res, next) => {
     email: req.body.email,
   });
 
-  const category = await ServiceCategoryService.getCategory({
+  const category = await ServiceCategoryService.getServiceCategory({
     code: 'name_rsv'
   });
 
