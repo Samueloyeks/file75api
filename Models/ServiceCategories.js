@@ -7,7 +7,10 @@ const ServiceCategoriesSchema = new mongoose.Schema({
     code: {
         type: String
     },
-    category: {
+    category: { 
+        type: String
+    },
+    description:{
         type: String
     },
     created_at: {

@@ -12,6 +12,8 @@ const globalErrorHandler = require('./Controllers/Error/LoadController');
 const authRouter = require('./Routes/Auth');
 const adminRouter = require('./Routes/Admin');
 const ReservationRouter = require('./Routes/Reservations');
+const ServiceCategoryRouter = require('./Routes/ServiceCategories');
+
 
 
 const app = express();
@@ -70,6 +72,8 @@ app.use((req, res, next) => {
 app.use('/api/v1', authRouter);
 app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/reservation', ReservationRouter);
+app.use('/api/v1/services', ServiceCategoryRouter);
+
 
 
 app.all('*', (req, res, next) => {
