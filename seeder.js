@@ -14,12 +14,16 @@ DB = DB.replace('<dbname>', process.env.DATABASE_NAME);
 seeder.connect(DB, () => {
     seeder.loadModels([
         './Models/SubmissionStatuses',
-        './Models/ServiceCategories'
+        './Models/AdminStatuses',
+        './Models/ServiceCategories',
+        './Models/Designations',
     ])
 
     seeder.clearModels([
         'SubmissionStatuses',
-        'ServiceCategories'
+        'AdminStatuses',
+        'ServiceCategories',
+        'Designations'
     ], () => {
 
         seeder.populateModels(data, (err, done) => {
@@ -55,6 +59,23 @@ const data = [
         ]
     },
     {
+        'model': 'AdminStatuses',
+        'documents': [
+            {
+                'code':'unattended',
+                'status': 'Unattended'
+            },
+            {
+                'code':'deployed',
+                'status': 'Deployed'
+            },
+            {
+                'code':'finished',
+                'status': 'Finished'
+            }
+        ]
+    },
+    {
         'model': 'ServiceCategories',
         'documents': [
             {
@@ -77,6 +98,14 @@ const data = [
                 'category': 'Licensing',
                 'description': 'Get a License',
             },
+        ]
+    },
+    {
+        'model': 'Designations',
+        'documents': [
+            {
+                'code':'CAC',
+            }
         ]
     },
 ]

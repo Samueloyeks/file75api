@@ -9,12 +9,25 @@ const adminSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['super-admin', 'level-4', 'level-3', "level-2", "level-1", "level-0"],
+    enum: ['super-admin','admin', 'level-4', 'level-3', "level-2", "level-1", "level-0"],
     default: 'super-admin',
+  },
+  designation: {
+    type: [String],
+    enum: ['CAC']
+  },
+  LastAssignmentDate: {
+    type: Date,
+    default: Date.now,
   },
   created_at: {
     type: Date,
     default: Date.now,
+  },
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
   },
 });
 adminSchema.plugin(mongoosePaginate);

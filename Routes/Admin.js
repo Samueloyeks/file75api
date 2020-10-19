@@ -7,11 +7,11 @@ const router = express.Router();
 
 router.post(
   '/ssh504/create',
-  authGuard.protect,
+  authGuard.protect, 
   adminGuard.isAdmin,
   adminGuard.isSuper,
   adminController.create
-);
+); 
 
 router.get(
   '/ssh504/fetchOne/:id',

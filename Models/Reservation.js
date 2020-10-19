@@ -29,7 +29,10 @@ const ReservationSchema = new Schema({
         validate: [validator.isEmail, 'Please provide a valid email'],
     },
     user: {
-        type: String,
+        // type: String,
+        // required: [true, 'Please provide user id'],
+        type: Schema.ObjectId,
+        ref: 'User',
         required: [true, 'Please provide user id'],
     },
     status: {
@@ -41,6 +44,16 @@ const ReservationSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'ServiceCategories',
         required: true
+    },
+    assignedTo: {
+        type: Schema.ObjectId,
+        ref: 'Admin',
+        required: [true, 'Please provide admin id'],
+    },
+    adminStatus: {
+        type: Schema.ObjectId,
+        ref: 'AdminStatuses',
+        required: true,
     },
     submitted:Date,
     expires:Date,

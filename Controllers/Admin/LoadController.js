@@ -5,6 +5,9 @@ const userService = require('../../Services/User');
 exports.create = catchAsync(async (req, res) => {
   req.body.type = 'email';
   req.body.role = 'admin';
+  req.body.slug =
+  Math.random().toString(36).substring(2, 15) +
+  Math.random().toString(36).substring(2, 15);
 
   const newUser = await userService.createUser(req.body);
 

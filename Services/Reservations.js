@@ -17,9 +17,11 @@ exports.createReservation = async (req) => {
         user: req.user,
         status: req.status,
         category: req.category,
+        assignedTo:req.assignedTo,
+        adminStatus:req.adminStatus,
         submitted: req.submitted,
         expires: req.expires,
-        viewed: req.viewed
+        viewed: req.viewed 
     });
 };
 
@@ -39,6 +41,7 @@ exports.getAllReservations = async (req) => {
         perPage = 30,
         search = null,
         byUserId = null,
+        byAdminId = null,
         byStatusCode = null,
         byCategorycode = null
     } = req.query;
@@ -49,6 +52,7 @@ exports.getAllReservations = async (req) => {
 
     if (byUserId) query = query.find({ "user": byUserId });
 
+    if (byAdminId) query = query.find({ "assignedTo": byAdminId });
 
     if (associations.length > 0) {
         for (const association of associations.split(',')) {

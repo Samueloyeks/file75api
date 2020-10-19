@@ -4,6 +4,8 @@ const reservationService = require('../../Services/Reservations');
 const userService = require('../../Services/User');
 const ServiceCategoryService = require('../../Services/ServiceCategories');
 const SubmissionStatusService = require('../../Services/SubmissionStatuses');
+const AdminStatusService = require('../../Services/AdminStatuses');
+const AdminService = require('../../Services/Admin');
 const Transaction = require('../Transactions/LoadController');
 
 
@@ -40,10 +42,19 @@ exports.store = catchAsync(async (req, res, next) => {
     code: 'pending'
   });
 
+  const adminStatus = await AdminStatusService.getAdminStatus({
+    code: 'unattended'
+  });
+
+  const assignedTo = await AdminService.getNextAdmin();
+  await AdminService.updateAssignment(assignedTo._id);
 
   req.body.user = user._id;
   req.body.status = status._id;
   req.body.category = category._id;
+  req.body.adminStatus = adminStatus._id;
+  req.body.assignedTo = assignedTo._id;
+
 
   var date = new Date();
   req.body.submitted = Date.now();
