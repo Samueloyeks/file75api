@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const User = require('../Models/User');
 const factory = require('../Helpers/handlerFactory');
-const passport  = require('passport');
-const strategy  =require('passport-facebook');
+const passport = require('passport');
+const strategy = require('passport-facebook');
 const FacebookTokenStrategy = require('passport-facebook-token');
 const dotenv = require('dotenv');
 
@@ -14,11 +14,12 @@ exports.createUser = async (req) => {
   return await User.create({
     fullName: req.fullName,
     email: req.email,
-    // phone: req.phone,
+    phone: req.phone,
     type: req.type,
     role: req.role,
     slug: req.slug,
     password: req.password,
+    adminId: req.adminId
   });
 };
 
@@ -52,7 +53,7 @@ exports.verify = async (slug) => {
 //         email, facebook_id, fullName
 //       })
 //       await user.save();
- 
+
 //       console.log(user)
 //     } catch (error) {
 //       done(error, false, error.message)

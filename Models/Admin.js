@@ -12,9 +12,9 @@ const adminSchema = new mongoose.Schema({
     enum: ['super-admin','admin', 'level-4', 'level-3', "level-2", "level-1", "level-0"],
     default: 'super-admin',
   },
-  designation: {
+  designations: {
     type: [String],
-    enum: ['CAC']
+    enum: ['cac']
   },
   LastAssignmentDate: {
     type: Date,

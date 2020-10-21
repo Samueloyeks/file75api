@@ -104,7 +104,8 @@ const data = [
         'model': 'Designations',
         'documents': [
             {
-                'code':'CAC',
+                'name':'Corporate affairs commission',
+                'code':'cac',
             }
         ]
     },

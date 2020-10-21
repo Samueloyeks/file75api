@@ -1,13 +1,14 @@
 const catchAsync = require('../../utils/catchAsync');
 const adminService = require('../../Services/Admin');
 const userService = require('../../Services/User');
+const User = require('../../Models/User');
 
 exports.create = catchAsync(async (req, res) => {
   req.body.type = 'email';
   req.body.role = 'admin';
   req.body.slug =
-  Math.random().toString(36).substring(2, 15) +
-  Math.random().toString(36).substring(2, 15);
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15);
 
   const newUser = await userService.createUser(req.body);
 
@@ -18,7 +19,15 @@ exports.create = catchAsync(async (req, res) => {
    */
 
   req.body.role = req.body.adminRole;
-  await adminService.createAdmin(req);
+  const newAdmin = await adminService.createAdmin(req);
+
+  await User.updateOne(
+    { _id: newUser._id },
+    {
+      adminId: newAdmin._id,
+    },
+    { useFindAndModify: false, upsert: true }
+  );
 
   return userService.createSendToken(newUser, 201, res);
 });

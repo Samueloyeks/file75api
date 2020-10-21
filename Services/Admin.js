@@ -4,7 +4,7 @@ exports.createAdmin = async (req) => {
   return await Admin.create({
     user: req.user,
     role: req.body.role,
-    designation: req.body.designation,
+    designations: req.body.designations,
   });
 };
 

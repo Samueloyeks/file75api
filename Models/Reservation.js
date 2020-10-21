@@ -55,9 +55,13 @@ const ReservationSchema = new Schema({
         ref: 'AdminStatuses',
         required: true,
     },
-    submitted:Date,
-    expires:Date,
-    viewed:Boolean,
+    designation: {
+        type: String,
+        required: [true, 'Please provide a designation'],
+    },
+    submitted: Date,
+    expires: Date,
+    viewed: Boolean,
     created_at: {
         type: Date,
         default: Date.now,

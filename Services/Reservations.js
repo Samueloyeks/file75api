@@ -3,6 +3,8 @@ const Reservation = require('../Models/Reservation');
 const SubmissionStatuses = require('../Models/SubmissionStatuses');
 const ServiceCategories = require('../Models/ServiceCategories');
 const factory = require('../Helpers/handlerFactory');
+const AdminService = require('./Admin');
+
 
 
 
@@ -17,11 +19,12 @@ exports.createReservation = async (req) => {
         user: req.user,
         status: req.status,
         category: req.category,
-        assignedTo:req.assignedTo,
-        adminStatus:req.adminStatus,
+        assignedTo: req.assignedTo,
+        adminStatus: req.adminStatus,
         submitted: req.submitted,
         expires: req.expires,
-        viewed: req.viewed 
+        viewed: req.viewed,
+        designation: req.designation
     });
 };
 
@@ -52,7 +55,15 @@ exports.getAllReservations = async (req) => {
 
     if (byUserId) query = query.find({ "user": byUserId });
 
-    if (byAdminId) query = query.find({ "assignedTo": byAdminId });
+    if (byAdminId) {
+        const admin = await AdminService.getOne(byAdminId);
+        const designations = admin.designations;
+
+        query = query.find({
+            "assignedTo": byAdminId,
+            "designation": { $in: designations }
+        });
+    }
 
     if (associations.length > 0) {
         for (const association of associations.split(',')) {
@@ -74,7 +85,7 @@ exports.getAllReservations = async (req) => {
 
     if (search) query = query.find({ $text: { $search: search } });
 
-    return await query.skip(skip).sort( [['_id', -1]] ).limit(pageLimit);
+    return await query.skip(skip).sort([['_id', -1]]).limit(pageLimit);
 };
 
 exports.byUser = async (userId) => {

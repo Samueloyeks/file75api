@@ -5,6 +5,7 @@ const userService = require('../../Services/User');
 const ServiceCategoryService = require('../../Services/ServiceCategories');
 const SubmissionStatusService = require('../../Services/SubmissionStatuses');
 const AdminStatusService = require('../../Services/AdminStatuses');
+const DesignationService = require('../../Services/Designations');
 const AdminService = require('../../Services/Admin');
 const Transaction = require('../Transactions/LoadController');
 
@@ -46,6 +47,7 @@ exports.store = catchAsync(async (req, res, next) => {
     code: 'unattended'
   });
 
+
   const assignedTo = await AdminService.getNextAdmin();
   await AdminService.updateAssignment(assignedTo._id);
 
@@ -54,6 +56,8 @@ exports.store = catchAsync(async (req, res, next) => {
   req.body.category = category._id;
   req.body.adminStatus = adminStatus._id;
   req.body.assignedTo = assignedTo._id;
+  req.body.designation = 'cac';
+
 
 
   var date = new Date();

@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const mongoosePaginate = require('mongoose-paginate-v2');
+const Schema = require('mongoose').Schema;
+
 
 
 const userSchema = new mongoose.Schema({
@@ -17,20 +19,18 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, 'Please provide a valid email'],
   },
-  // phone: {
-  //   type: String,
-  //   required: [true, 'Please provide your phone Number'],
-  //   unique: true,
-  // },
+  phone: {
+    type: String,
+  },
   role: {
     type: String,
-    enum: ['admin', 'user','super-admin'],
+    enum: ['admin', 'user', 'super-admin'],
     default: 'user',
   },
   userToken: String,
   type: {
     type: String,
-    enum: ['email','facebook','google'],
+    enum: ['email', 'facebook', 'google'],
     default: 'email',
   },
   slug: {
@@ -55,6 +55,10 @@ const userSchema = new mongoose.Schema({
   updated_at: {
     type: Date,
     default: Date.now,
+  },
+  adminId: {
+    type: Schema.ObjectId,
+    ref: 'Admin',
   },
   passwordChangedAt: Date,
   passwordResetToken: String,
