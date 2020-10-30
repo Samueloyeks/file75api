@@ -8,6 +8,7 @@ const AdminStatusService = require('../../Services/AdminStatuses');
 const DesignationService = require('../../Services/Designations');
 const AdminService = require('../../Services/Admin');
 const Transaction = require('../Transactions/LoadController');
+const Reservation = require('../../Models/Reservation');
 
 
 
@@ -59,7 +60,6 @@ exports.store = catchAsync(async (req, res, next) => {
   req.body.designation = 'cac';
 
 
-
   var date = new Date();
   req.body.submitted = Date.now();
   req.body.expires = date.setDate(date.getDate() + 60);
@@ -99,8 +99,22 @@ exports.show = catchAsync(async (req, res, next) => {
 
 // update reservation details
 // PUT or PATCH reservations/:id
-exports.update = catchAsync(async (req, res, next) => {
+exports.deploy = catchAsync(async (req, res, next) => {
 
+  const adminStatus = await AdminStatusService.getAdminStatus({
+    code: 'deployed'
+  });
+
+  const updatedReservation = await Reservation.update({ _id: req.body._id },
+    { $set: { "adminStatus": adminStatus._id } }, { multi: true })
+
+
+  return res.status(200).json({
+    status: 'success',
+    data: {
+      updatedReservation
+    },
+  });
 });
 
 // delete reservation with id

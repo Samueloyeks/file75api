@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Reservation = require('../Models/Reservation');
 const SubmissionStatuses = require('../Models/SubmissionStatuses');
+const AdminStatuses = require('../Models/AdminStatuses');
 const ServiceCategories = require('../Models/ServiceCategories');
 const factory = require('../Helpers/handlerFactory');
 const AdminService = require('./Admin');
@@ -46,6 +47,7 @@ exports.getAllReservations = async (req) => {
         byUserId = null,
         byAdminId = null,
         byStatusCode = null,
+        byAdminStatusCode=null,
         byCategorycode = null
     } = req.query;
 
@@ -75,6 +77,12 @@ exports.getAllReservations = async (req) => {
         const status = await SubmissionStatuses.find({ "code": byStatusCode });
         const statusId = status[0]._id
         query = query.find({ "status": statusId });
+    }
+
+    if (byAdminStatusCode) {
+        const adminStatus = await AdminStatuses.find({ "code": byAdminStatusCode });
+        const adminStatusId = adminStatus[0]._id
+        query = query.find({ "adminStatus": adminStatusId });
     }
 
     if (byCategorycode) {

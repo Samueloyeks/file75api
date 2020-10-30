@@ -11,7 +11,7 @@ exports.createAdmin = async (req) => {
 exports.getOne = async (id, byUser, popOptions) => {
   let params;
 
-  if (byUser === true) {
+  if (byUser === true) { 
     params = { user: id };
   } else {
     params = { _id: id };
