@@ -9,6 +9,8 @@ const DesignationService = require('../../Services/Designations');
 const AdminService = require('../../Services/Admin');
 const Transaction = require('../Transactions/LoadController');
 const Reservation = require('../../Models/Reservation');
+const multer = require('multer');
+const Email = require('../../utils/email');
 
 
 
@@ -115,6 +117,41 @@ exports.deploy = catchAsync(async (req, res, next) => {
       updatedReservation
     },
   });
+});
+
+
+exports.finish = catchAsync(async (req, res, next) => {
+
+  const adminStatus = await AdminStatusService.getAdminStatus({
+    code: 'finished'
+  });
+
+  const status = await SubmissionStatusService.getStatus({
+    code: 'approved'
+  });
+
+  const updatedReservation = await Reservation.update({ _id: req.body._id },
+    {
+      $set: {
+        "adminStatus": adminStatus._id,
+        "status": status._id,
+        "responseFiles":req.body.responseFiles
+      },
+    },
+    { multi: true }
+  )
+
+  const email = new Email(req.body.user,null,req.body.responseFiles)
+
+  email.send('reservationApproved','Name Reservation Approved')
+
+  return res.status(200).json({
+    status: 'success',
+    data: {
+      updatedReservation
+    },
+  });
+
 });
 
 // delete reservation with id

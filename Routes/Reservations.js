@@ -15,5 +15,11 @@ router.put('/deploy/:id',
     ReservationController.deploy
 )
 
+router.put('/finish/:id',
+    // authGuard.protect,
+    // adminGuard.isAdmin,
+    ReservationController.finish
+)
+
 
 module.exports = router;

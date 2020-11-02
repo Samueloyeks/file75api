@@ -29,7 +29,7 @@ mongoose
   .connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true, 
   })
   // eslint-disable-next-line no-console
   .then(() => console.log('DB connection successful!'));

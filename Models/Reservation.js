@@ -62,6 +62,7 @@ const ReservationSchema = new Schema({
     submitted: Date,
     expires: Date,
     viewed: Boolean,
+    responseFiles:[String],
     created_at: {
         type: Date,
         default: Date.now,

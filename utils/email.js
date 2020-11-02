@@ -4,11 +4,12 @@ const pug = require('pug');
 const htmlToText = require('html-to-text');
 
 module.exports = class Email {
-  constructor(user, url) {
+  constructor(user, url, attachmentPaths) {
     this.to = user.email;
     this.firstName = user.fullName.split(' ')[0];
     this.url = url;
-    this.from = `Express BoilerPlate <${process.env.EMAIL}>`;
+    this.from = `Asset and Equity <${process.env.EMAIL}>`;
+    this.attachmentPaths = attachmentPaths
   }
 
   newTransport() {
@@ -42,6 +43,13 @@ module.exports = class Email {
       subject,
     });
 
+    const fileAttachments = [];
+
+    for (var filePath of this.attachmentPaths) {
+      fileAttachments.push({ path: `${__dirname}/../${filePath}` })
+    }
+
+
     // 2) Define email options
     const mailOptions = {
       from: this.from,
@@ -50,6 +58,7 @@ module.exports = class Email {
       html,
       text: htmlToText.fromString(html),
       attachments: [
+        ...fileAttachments,
         {
           filename: 'logo.png',
           path: `${__dirname}/../public/images/logo.png`,
@@ -61,6 +70,7 @@ module.exports = class Email {
     // 3) Create a transport and send email
     await this.newTransport().sendMail(mailOptions, (err) => {
       if (err) {
+        console.log(err)
         // eslint-disable-next-line no-console
         return console.log('Error occurs');
       }
@@ -70,7 +80,7 @@ module.exports = class Email {
   }
 
   async welcome() {
-    await this.send('welcome', 'Welcome to My App !');
+    await this.send('welcome', 'Welcome to My File !');
   }
 
   async sendPasswordReset() {

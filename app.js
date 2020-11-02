@@ -6,6 +6,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 const compression = require('compression');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./Controllers/Error/LoadController');
@@ -13,6 +14,7 @@ const authRouter = require('./Routes/Auth');
 const adminRouter = require('./Routes/Admin');
 const ReservationRouter = require('./Routes/Reservations');
 const ServiceCategoryRouter = require('./Routes/ServiceCategories');
+const UploadsRouter = require('./Routes/Uploads');
 
 
 
@@ -23,6 +25,7 @@ app.enable('trust proxy');
 app.use(
   cors()
 );
+app.use(fileUpload());
 
 // 1) GLOBAL MIDDLEWARE
 // Set security HTTP headers
@@ -35,7 +38,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // Limit requests from same API
 const limiter = rateLimit({
-  max: 100,
+  max: 500,
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in an hour!',
 });
@@ -72,7 +75,8 @@ app.use((req, res, next) => {
 app.use('/api/v1', authRouter);
 app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/reservation', ReservationRouter);
-app.use('/api/v1/services', ServiceCategoryRouter);
+app.use('/api/v1/services', ServiceCategoryRouter); 
+app.use('/api/v1/uploads', UploadsRouter); 
 
 
 
