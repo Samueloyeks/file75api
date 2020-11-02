@@ -25,7 +25,8 @@ exports.createReservation = async (req) => {
         submitted: req.submitted,
         expires: req.expires,
         viewed: req.viewed,
-        designation: req.designation
+        designation: req.designation,
+        responseFiles:req.responseFiles
     });
 };
 

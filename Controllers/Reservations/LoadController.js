@@ -60,6 +60,7 @@ exports.store = catchAsync(async (req, res, next) => {
   req.body.adminStatus = adminStatus._id;
   req.body.assignedTo = assignedTo._id;
   req.body.designation = 'cac';
+  req.body.responseFiles=[]
 
 
   var date = new Date();
