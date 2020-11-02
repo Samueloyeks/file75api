@@ -56,20 +56,18 @@ exports.downloadFile = async (req, res) => {
     // res.setHeader('Content-Disposition', 'inline; filename='+ filename);
     // readStream.pipe(res);
 
-    pdf2base64(file)
-        .then(
-            (response) => {
-                return res.send({
-                     name: filename, 
-                     data: response 
-                    });
-            }
-        )
-        .catch(
-            (error) => {
-                console.log(error);
-            }
-        )
+    try{
+        let base64File = await pdf2base64(file)
+
+        return res.send({
+            name: filename, 
+            data: base64File 
+           });
+    }catch(ex){
+        console.log(ex)
+        return next(new AppError('Unable to create base 64', 500));
+    }
+
 };
 
 
