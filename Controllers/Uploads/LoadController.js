@@ -4,6 +4,8 @@ const upload = require("../../Middleware/Upload");
 var fs = require('fs');
 var path = require('path');
 var mime = require('mime');
+const pdf2base64 = require('pdf-to-base64');
+
 
 exports.uploadFile = async (req, res) => {
 
@@ -29,17 +31,45 @@ exports.uploadFile = async (req, res) => {
 
 exports.downloadFile = async (req, res) => {
     const { filePath } = req.query;
-
     var file = `${__dirname}/../../${filePath}`
 
+    let readStream = fs.createWriteStream(file);
+    let stat = fs.statSync(file);
     var filename = path.basename(file);
-    var mimetype = mime.lookup(file);
 
-    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-    res.setHeader('Content-type', mimetype);
+    // var filename = path.basename(file);
+    // var mimetype = mime.lookup(file);
 
-    var filestream = fs.createReadStream(file);
-    filestream.pipe(res);
+    // res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+    // res.setHeader('Content-type', mimetype);
+
+    // var filestream = fs.createReadStream(file);
+    // filestream.pipe(res);
+
+    // readStream.on('close', () => {
+    //     res.end()
+    // })
+
+    // // Stream chunks to response
+    // res.setHeader('Content-Length', stat.size);
+    // res.setHeader('Content-Type', 'application/pdf');
+    // res.setHeader('Content-Disposition', 'inline; filename='+ filename);
+    // readStream.pipe(res);
+
+    pdf2base64(file)
+        .then(
+            (response) => {
+                return res.send({
+                     name: filename, 
+                     data: response 
+                    });
+            }
+        )
+        .catch(
+            (error) => {
+                console.log(error);
+            }
+        )
 };
 
 
