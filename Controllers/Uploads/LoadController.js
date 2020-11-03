@@ -31,11 +31,12 @@ exports.uploadFile = async (req, res) => {
 
 exports.downloadFile = async (req, res) => {
     const { filePath } = req.query;
-    var file = `${__dirname}/../../${filePath}`
+    var fullFilePath = `${__dirname}/../../${filePath}`
 
-    let readStream = fs.createWriteStream(file);
-    let stat = fs.statSync(file);
-    var filename = path.basename(file);
+    var stream = fs.createReadStream(fullFilePath)
+    let readStream = fs.createWriteStream(fullFilePath);
+    let stat = fs.statSync(fullFilePath);
+    var filename = path.basename(fullFilePath);
 
     // var filename = path.basename(file);
     // var mimetype = mime.lookup(file);
@@ -56,19 +57,21 @@ exports.downloadFile = async (req, res) => {
     // res.setHeader('Content-Disposition', 'inline; filename='+ filename);
     // readStream.pipe(res);
 
-    try {
-        const base64File = await pdf2base64(file)
-        console.log(base64File)
+    // try {
+    //     const base64File = await pdf2base64(file)
+    //     console.log(base64File)
 
-        return res.send({
-            name: filename,
-            data: base64File
-        });
-    } catch (ex) {
-        console.log(ex)
-        return next(new AppError('Unable to create base 64', 500));
-    }
+    //     return res.send({
+    //         name: filename,
+    //         data: base64File
+    //     });
+    // } catch (ex) {
+    //     console.log(ex)
+    //     return next(new AppError('Unable to create base 64', 500));
+    // }
 
+  
+    res.sendFile(path.resolve(fullFilePath))
 };
 
 
