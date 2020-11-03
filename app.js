@@ -15,6 +15,8 @@ const adminRouter = require('./Routes/Admin');
 const ReservationRouter = require('./Routes/Reservations');
 const ServiceCategoryRouter = require('./Routes/ServiceCategories');
 const UploadsRouter = require('./Routes/Uploads');
+const path = require("path")
+
 
 
 
@@ -62,6 +64,7 @@ app.use(
 
 // Serving static files
 app.use(express.static(`${__dirname}/public`));
+app.use("/Files", express.static(path.join(__dirname, "Files")))
 
 app.use(compression());
 
@@ -87,3 +90,4 @@ app.all('*', (req, res, next) => {
 app.use(globalErrorHandler);
 
 module.exports = app;
+ 
