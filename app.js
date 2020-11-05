@@ -64,7 +64,7 @@ app.use(
 
 // Serving static files
 app.use(express.static(`${__dirname}/public`));
-app.use("/Files", express.static(path.join(__dirname, "Files")))
+app.use("/api/v1/Files", express.static(path.join(__dirname, "Files")))
 
 app.use(compression());
 
