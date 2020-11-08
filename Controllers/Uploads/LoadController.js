@@ -7,7 +7,9 @@ var mime = require('mime');
 const pdf2base64 = require('pdf-to-base64');
 
 
-exports.uploadFile = async (req, res) => {
+
+
+exports.uploadFile = async (req, res,next) => {
 
     if (!req.files) {
         console.log('no files')
@@ -17,7 +19,7 @@ exports.uploadFile = async (req, res) => {
     const myFile = req.files.file;
     let dir = `${__dirname}/../../Files`
     if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir); 
+        fs.mkdirSync(dir);
     }
     let fileName = `${Date.now()}-${myFile.name}`
     myFile.mv(`${dir}/${fileName}`, function (err) {
@@ -31,56 +33,22 @@ exports.uploadFile = async (req, res) => {
 
 exports.downloadFile = async (req, res) => {
     const { filePath } = req.query;
-    var fullFilePath = `${__dirname}/../../${filePath}`
+    var fullPath = `${__dirname}/../../${filePath}`
+    console.log('FULL PATH:')
+    console.log(path.join(fullPath))
 
-    var stream = fs.createReadStream(fullFilePath)
-    let readStream = fs.createWriteStream(fullFilePath);
-    let stat = fs.statSync(fullFilePath);
-    var filename = path.basename(fullFilePath);
+    var stat = fs.statSync(path.join(fullPath));
 
-    // var filename = path.basename(file);
-    // var mimetype = mime.lookup(file);
+    res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Content-Length': stat.size
+    });
 
-    // res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-    // res.setHeader('Content-type', mimetype);
+    var readStream = fs.createReadStream(path.join(fullPath));
+    readStream.on('close', () => {
+        readStream.pipe(res);
+    })
 
-    // var filestream = fs.createReadStream(file);
-    // filestream.pipe(res);
-
-    // readStream.on('close', () => {
-    //     res.end()
-    // })
-
-    // // Stream chunks to response
-    // res.setHeader('Content-Length', stat.size);
-    // res.setHeader('Content-Type', 'application/pdf');
-    // res.setHeader('Content-Disposition', 'inline; filename='+ filename);
-    // readStream.pipe(res);
-
-    // try {
-    //     const base64File = await pdf2base64(fullFilePath)
-    //     console.log(base64File)
-
-    //     return res.send({
-    //         name: filename,
-    //         data: base64File
-    //     });
-    // } catch (ex) {
-    //     console.log(ex)
-    //     return next(new AppError('Unable to create base 64', 500));
-    // }
-
-    // var mimetype = mime.lookup(fullFilePath);
-  
-    // res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-    // res.setHeader('Content-type', mimetype);
-  
-    // var filestream = fs.createReadStream(fullFilePath);
-    // filestream.pipe(res);
-
-    res.sendFile(path.join(fullFilePath))
-
-  
 };
 
 

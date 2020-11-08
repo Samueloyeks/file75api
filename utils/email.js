@@ -4,12 +4,12 @@ const pug = require('pug');
 const htmlToText = require('html-to-text');
 
 module.exports = class Email {
-  constructor(user, url, attachmentPaths) {
+  constructor(user, url, fileUrls) {
     this.to = user.email;
     this.firstName = user.fullName.split(' ')[0];
     this.url = url;
     this.from = `Asset and Equity <${process.env.EMAIL}>`;
-    this.attachmentPaths = attachmentPaths
+    this.fileUrls = fileUrls
   }
 
   newTransport() {
@@ -40,14 +40,15 @@ module.exports = class Email {
     const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
       firstName: this.firstName,
       url: this.url,
+      fileUrls: this.fileUrls,
       subject,
     });
 
-    const fileAttachments = [];
+    // const fileAttachments = [];
 
-    for (var filePath of this.attachmentPaths) {
-      fileAttachments.push({ path: `${__dirname}/../${filePath}` })
-    }
+    // for (var filePath of this.attachmentPaths) {
+    //   fileAttachments.push({ path: `${__dirname}/../${filePath}` })
+    // }
 
 
     // 2) Define email options
@@ -58,7 +59,6 @@ module.exports = class Email {
       html,
       text: htmlToText.fromString(html),
       attachments: [
-        ...fileAttachments,
         {
           filename: 'logo.png',
           path: `${__dirname}/../public/images/logo.png`,

@@ -9,8 +9,20 @@ const DesignationService = require('../../Services/Designations');
 const AdminService = require('../../Services/Admin');
 const Transaction = require('../Transactions/LoadController');
 const Reservation = require('../../Models/Reservation');
-const multer = require('multer');
 const Email = require('../../utils/email');
+const bodyParser = require('body-parser');
+const { Storage } = require('@google-cloud/storage');
+const { upload, uploadToStorage } = require('../../Middleware/Upload');
+const User = require('../../Models/User');
+
+
+
+const storage = new Storage({
+  projectId: process.env.GCLOUD_PROJECT_ID,
+  keyFilename: process.env.GCLOUD_APPLICATION_CREDENTIALS,
+});
+
+const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET_URL);
 
 
 
@@ -60,7 +72,7 @@ exports.store = catchAsync(async (req, res, next) => {
   req.body.adminStatus = adminStatus._id;
   req.body.assignedTo = assignedTo._id;
   req.body.designation = 'cac';
-  req.body.responseFiles=[]
+  req.body.responseFiles = []
 
 
   var date = new Date();
@@ -123,35 +135,71 @@ exports.deploy = catchAsync(async (req, res, next) => {
 
 exports.finish = catchAsync(async (req, res, next) => {
 
-  const adminStatus = await AdminStatusService.getAdminStatus({
-    code: 'finished'
-  });
+  try {
 
-  const status = await SubmissionStatusService.getStatus({
-    code: 'approved'
-  });
+    if (!req.files) {
+      console.log('no files')
+      res.status(400).send('Error, could not upload file');
+      return;
+    }
 
-  const updatedReservation = await Reservation.update({ _id: req.body._id },
-    {
-      $set: {
-        "adminStatus": adminStatus._id,
-        "status": status._id,
-        "responseFiles":req.body.responseFiles
+    let urls = []
+
+
+    if (Array.isArray(req.files.responseFiles)) {
+      for (var file of req.files.responseFiles) {
+        const url = await uploadToStorage(file)
+        urls.push(url)
+      }
+    } else {
+      const url = await uploadToStorage(req.files.responseFiles)
+      urls.push(url)
+    }
+
+    const adminStatus = await AdminStatusService.getAdminStatus({
+      code: 'finished'
+    });
+
+    const status = await SubmissionStatusService.getStatus({
+      code: 'approved'
+    });
+
+    const updatedReservation = await Reservation.update({ _id: req.params.id },
+      {
+        $set: {
+          "adminStatus": adminStatus._id,
+          "status": status._id,
+          "responseFiles": urls
+        },
       },
-    },
-    { multi: true }
-  )
+      { multi: true }
+    )
 
-  const email = new Email(req.body.user,null,req.body.responseFiles)
 
-  email.send('reservationApproved','Name Reservation Approved')
+    const reservation = await Reservation.find({ _id: req.params.id })
+    const user = await User.findById(reservation[0].user);
 
-  return res.status(200).json({
-    status: 'success',
-    data: {
-      updatedReservation
-    },
-  });
+    const email = new Email(user, null, urls)
+
+    email.send('reservationApproved', 'Name Reservation Approved')
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        reservation
+      },
+    });
+
+    // res
+    //   .status(200)
+    //   .send(urls);
+
+  } catch (error) {
+    console.log(error)
+    console.log('unable to upload')
+    res.status(400).send(`Error, could not upload file: ${error}`);
+    return;
+  }
 
 });
 

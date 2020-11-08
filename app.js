@@ -16,6 +16,8 @@ const ReservationRouter = require('./Routes/Reservations');
 const ServiceCategoryRouter = require('./Routes/ServiceCategories');
 const UploadsRouter = require('./Routes/Uploads');
 const path = require("path")
+const bodyParser = require('body-parser');
+
 
 
 
@@ -49,6 +51,7 @@ app.use('/api', limiter);
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
 
+
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
 
@@ -56,7 +59,7 @@ app.use(mongoSanitize());
 app.use(xss());
 
 // Prevent parameter pollution
-app.use(
+app.use( 
   hpp({
     whitelist: ['reference'],
   })
@@ -64,7 +67,6 @@ app.use(
 
 // Serving static files
 app.use(express.static(`${__dirname}/public`));
-app.use("/api/v1/Files", express.static(path.join(__dirname, "Files")))
 
 app.use(compression());
 

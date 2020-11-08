@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Mayorwa/Express-boilerplate.git#readme",
   "dependencies": {
+    "@google-cloud/storage": "^5.4.0",
     "@hapi/joi": "^15.1.0",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
