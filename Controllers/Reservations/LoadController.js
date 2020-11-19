@@ -7,6 +7,8 @@ const SubmissionStatusService = require('../../Services/SubmissionStatuses');
 const AdminStatusService = require('../../Services/AdminStatuses');
 const DesignationService = require('../../Services/Designations');
 const AdminService = require('../../Services/Admin');
+const ReservationLog = require('../../Models/ReservationLog');
+const Comments = require('../../Models/Comments');
 const Transaction = require('../Transactions/LoadController');
 const Reservation = require('../../Models/Reservation');
 const Email = require('../../utils/email');
@@ -90,6 +92,17 @@ exports.store = catchAsync(async (req, res, next) => {
   req.body = TransactionData;
 
   Transaction.store(req);
+
+  let title = 'New Reservation Created';
+  let comment = await Comments.find({ title: title });
+  console.log(comment)
+
+  await ReservationLog.create({
+    reservation: newreservation._id,
+    comment: comment[0]._id,
+    user: user._id,
+    admin: assignedTo._id
+  });
 
   return res.status(200).json({
     status: 'success',

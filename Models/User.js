@@ -48,6 +48,12 @@ const userSchema = new mongoose.Schema({
     minlength: 8,
     select: false,
   },
+  passport: {
+    type: String,
+  },
+  signature: {
+    type: String,
+  },
   created_at: {
     type: Date,
     default: Date.now,

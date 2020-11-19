@@ -17,13 +17,15 @@ seeder.connect(DB, () => {
         './Models/AdminStatuses',
         './Models/ServiceCategories',
         './Models/Designations',
+        './Models/Comments',
     ])
 
     seeder.clearModels([
         'SubmissionStatuses',
         'AdminStatuses',
         'ServiceCategories',
-        'Designations'
+        'Designations',
+        'Comments'
     ], () => {
 
         seeder.populateModels(data, (err, done) => {
@@ -45,15 +47,15 @@ const data = [
         'model': 'SubmissionStatuses',
         'documents': [
             {
-                'code':'pending',
+                'code': 'pending',
                 'status': 'Pending'
             },
             {
-                'code':'approved',
+                'code': 'approved',
                 'status': 'Approved'
             },
             {
-                'code':'rejected',
+                'code': 'rejected',
                 'status': 'Rejected'
             }
         ]
@@ -62,16 +64,20 @@ const data = [
         'model': 'AdminStatuses',
         'documents': [
             {
-                'code':'unattended',
+                'code': 'unattended',
                 'status': 'Unattended'
             },
             {
-                'code':'deployed',
+                'code': 'deployed',
                 'status': 'Deployed'
             },
             {
-                'code':'finished',
+                'code': 'finished',
                 'status': 'Finished'
+            },
+            {
+                'code': 'rejected',
+                'status': 'Rejected'
             }
         ]
     },
@@ -85,7 +91,7 @@ const data = [
             },
             {
                 'code': 'business_reg',
-                'category': 'Business Registration',
+                'category': 'Business Name Registration',
                 'description': 'Complete registration process for your business',
             },
             {
@@ -104,9 +110,38 @@ const data = [
         'model': 'Designations',
         'documents': [
             {
-                'name':'Corporate affairs commission',
-                'code':'cac',
+                'name': 'Corporate affairs commission',
+                'code': 'cac',
             }
+        ]
+    },
+    {
+        'model': 'Comments',
+        'documents': [
+            {
+                'title': 'New Reservation Created',
+            },
+            {
+                'title': 'Reservation Deployed',
+            },
+            {
+                'title': 'Reservation Completed',
+            },
+            {
+                'title': 'Reservation Rejected',
+            },
+            {
+                'title': 'New Business Registration Created',
+            },
+            {
+                'title': 'Business Registration Deployed',
+            },
+            {
+                'title': 'Business Registration Completed',
+            },
+            {
+                'title': 'Business Registration  Rejected',
+            },
         ]
     },
 ]
