@@ -49,7 +49,7 @@ const uploadToStorage = (file, filename) => {
       reject('No file');
     }
 
-    let newFileName = `${file.name}_${Date.now()}`;
+    let newFileName = `${Date.now()}_${file.name}`;
     let fileUpload = bucket.file(newFileName);
     const blobStream = fileUpload.createWriteStream({
       metadata: {
