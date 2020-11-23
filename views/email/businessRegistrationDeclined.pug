@@ -1,0 +1,21 @@
+extends baseEmail
+
+block content
+    img(src="cid:logo" alt="File Logo" width="120")
+    p Hello #{firstName},
+    p Your business registration was declined.
+    p You can download your document(s) at:
+    ul
+        for url in fileUrls
+            li= url
+    table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+        tbody
+            tr
+                td(align='left')
+                    table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+                        tbody
+                            tr
+                                td
+    p Thanks for using File!
+    p - Regards,
+    p - File Team

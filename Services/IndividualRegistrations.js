@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Reservation = require('../Models/Reservation');
+const IndividualRegistration = require('../Models/IndividualRegistration');
 const SubmissionStatuses = require('../Models/SubmissionStatuses');
 const AdminStatuses = require('../Models/AdminStatuses');
 const ServiceCategories = require('../Models/ServiceCategories');
@@ -10,13 +10,28 @@ const AdminService = require('./Admin');
 
 
 
-exports.createReservation = async (req) => {
-    return await Reservation.create({
-        companyName1: req.companyName1,
-        companyName2: req.companyName2,
+exports.createIndividualregistration = async (req) => {
+    return await IndividualRegistration.create({
+        businessName1: req.businessName1,
+        businessName2: req.businessName2,
+        availabilityCode: req.availabilityCode,
+        principalAddress: req.principalAddress,
+        branchAddress: req.branchAddress,
+        businessCategory: req.businessCategory,
+        fullName: req.fullName,
+        surname: req.surname,
+        age: req.age,
+        sex: req.sex,
         phone: req.phone,
-        charge: req.charge,
         email: req.email,
+        address: req.email,
+        occupation: req.occupation,
+        nationality: req.nationality,
+        state: req.state,
+        city: req.city,
+        signature: req.signature,
+        passport: req.passport,
+        charge: req.charge,
         user: req.user,
         status: req.status,
         category: req.category,
@@ -26,20 +41,20 @@ exports.createReservation = async (req) => {
         expires: req.expires,
         viewed: req.viewed,
         designation: req.designation,
-        responseFiles:req.responseFiles
+        responseFiles: req.responseFiles
     });
 };
 
-exports.getReservationDefault = factory.getOne(Reservation);
+exports.getIndividualRegistrationDefault = factory.getOne(IndividualRegistration);
 
 
-exports.getReservation = async (params) => {
+exports.getIndividualRegistration = async (params) => {
     const reqparams = { _id: params.id };
-    const query = Reservation.findOne(reqparams);
+    const query = IndividualRegistration.findOne(reqparams);
     return await query;
 };
 
-exports.getAllReservations = async (req) => {
+exports.getAllIndividualRegistration = async (req) => {
     const {
         associations = [],
         page = 1,
@@ -48,11 +63,11 @@ exports.getAllReservations = async (req) => {
         byUserId = null,
         byAdminId = null,
         byStatusCode = null,
-        byAdminStatusCode=null,
+        byAdminStatusCode = null,
         byCategorycode = null
     } = req.query;
 
-    var query = Reservation.find();
+    var query = IndividualRegistration.find();
     const skip = parseInt((page - 1) * perPage);
     const pageLimit = parseInt(perPage)
 
@@ -98,7 +113,7 @@ exports.getAllReservations = async (req) => {
 };
 
 exports.byUser = async (userId) => {
-    const query = Reservation.find({
+    const query = IndividualRegistration.find({
         "user": userId
     });
     return await query;

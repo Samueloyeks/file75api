@@ -58,7 +58,7 @@ exports.getAllBusinessRegistrations= async (req) => {
         byCategorycode = null
     } = req.query;
 
-    var query = Reservation.find();
+    var query = BusinessRegistration.find();
     const skip = parseInt((page - 1) * perPage);
     const pageLimit = parseInt(perPage)
 
@@ -104,8 +104,8 @@ exports.getAllBusinessRegistrations= async (req) => {
 };
 
 exports.byUser = async (userId) => {
-    const query = Reservation.find({
-        "userId": userId
+    const query = BusinessRegistration.find({
+        "user": userId
     });
     return await query;
 }

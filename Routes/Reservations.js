@@ -13,7 +13,7 @@ const uploader = multer({
 });
 
 
-const router = express.Router();
+const router = express.Router(); 
 
 router.post('/', ReservationController.store, authGuard.protect);
 router.get('/', ReservationController.index, authGuard.protect);
@@ -27,6 +27,13 @@ router.put('/deploy/:id',
 router.put('/finish/:id',
     uploader.single('responseFiles', 5),
     ReservationController.finish,
+    authGuard.protect, 
+    // adminGuard.isAdmin,
+)
+
+router.put('/reject/:id',
+    uploader.single('responseFiles', 5),
+    ReservationController.reject,
     authGuard.protect,
     // adminGuard.isAdmin,
 )

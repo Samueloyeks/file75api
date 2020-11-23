@@ -95,7 +95,6 @@ exports.store = catchAsync(async (req, res, next) => {
 
   let title = 'New Reservation Created';
   let comment = await Comments.find({ title: title });
-  console.log(comment)
 
   await ReservationLog.create({
     reservation: newreservation._id,
@@ -136,6 +135,17 @@ exports.deploy = catchAsync(async (req, res, next) => {
   const updatedReservation = await Reservation.update({ _id: req.body._id },
     { $set: { "adminStatus": adminStatus._id } }, { multi: true })
 
+  const reservation = await Reservation.find({_id:req.body._id});
+
+  let title = 'Reservation Deployed';
+  let comment = await Comments.find({ title: title });
+
+  await ReservationLog.create({
+    reservation: reservation[0]._id,
+    comment: comment[0]._id,
+    user: reservation[0].user,
+    admin: reservation[0].assignedTo
+  });
 
   return res.status(200).json({
     status: 'success',
@@ -195,6 +205,97 @@ exports.finish = catchAsync(async (req, res, next) => {
     const email = new Email(user, null, urls)
 
     email.send('reservationApproved', 'Name Reservation Approved')
+
+    let title = 'Reservation Completed';
+    let comment = await Comments.find({ title: title });
+  
+    await ReservationLog.create({
+      reservation: reservation[0]._id,
+      comment: comment[0]._id,
+      user: reservation[0].user,
+      admin: reservation[0].assignedTo
+    });
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        reservation
+      },
+    });
+
+    // res
+    //   .status(200)
+    //   .send(urls);
+
+  } catch (error) {
+    console.log(error)
+    console.log('unable to upload')
+    res.status(400).send(`Error, could not upload file: ${error}`);
+    return;
+  }
+
+});
+
+
+exports.reject = catchAsync(async (req, res, next) => {
+
+  try {
+
+    if (!req.files) {
+      console.log('no files')
+      res.status(400).send('Error, could not upload file');
+      return;
+    }
+
+    let urls = []
+
+
+    if (Array.isArray(req.files.responseFiles)) {
+      for (var file of req.files.responseFiles) {
+        const url = await uploadToStorage(file)
+        urls.push(url)
+      }
+    } else {
+      const url = await uploadToStorage(req.files.responseFiles)
+      urls.push(url)
+    }
+
+    const adminStatus = await AdminStatusService.getAdminStatus({
+      code: 'rejected'
+    });
+
+    const status = await SubmissionStatusService.getStatus({
+      code: 'rejected'
+    });
+
+    const updatedReservation = await Reservation.update({ _id: req.params.id },
+      {
+        $set: {
+          "adminStatus": adminStatus._id,
+          "status": status._id,
+          "responseFiles": urls
+        },
+      },
+      { multi: true }
+    )
+
+
+    const reservation = await Reservation.find({ _id: req.params.id })
+    const user = await User.findById(reservation[0].user);
+
+    const email = new Email(user, null, urls)
+
+    email.send('reservationRejected', 'Name Reservation Declined')
+
+    let title = 'Reservation Rejected';
+    let comment = await Comments.find({ title: title });
+  
+    await ReservationLog.create({
+      reservation: reservation[0]._id,
+      comment: comment[0]._id,
+      user: reservation[0].user,
+      admin: reservation[0].assignedTo
+    });
 
     return res.status(200).json({
       status: 'success',

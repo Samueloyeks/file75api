@@ -13,6 +13,7 @@ const globalErrorHandler = require('./Controllers/Error/LoadController');
 const authRouter = require('./Routes/Auth');
 const adminRouter = require('./Routes/Admin');
 const ReservationRouter = require('./Routes/Reservations');
+const BusinessRegistrationRouter = require('./Routes/BusinessRegistration');
 const ServiceCategoryRouter = require('./Routes/ServiceCategories');
 const UploadsRouter = require('./Routes/Uploads');
 const path = require("path")
@@ -80,6 +81,7 @@ app.use((req, res, next) => {
 app.use('/api/v1', authRouter);
 app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/reservation', ReservationRouter);
+app.use('/api/v1/businessReg', BusinessRegistrationRouter);
 app.use('/api/v1/services', ServiceCategoryRouter); 
 app.use('/api/v1/uploads', UploadsRouter); 
 
