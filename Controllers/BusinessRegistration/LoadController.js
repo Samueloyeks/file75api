@@ -600,6 +600,12 @@ exports.destroy = catchAsync(async (req, res, next) => {
 
 });
 
+exports.uploadImage = catchAsync(async (req, res, next) => {
+  console.log(req.body);
+  console.log(req.file);
+  console.log(req.files);
+})
+
 
 
 
