@@ -65,9 +65,9 @@ router.put('/individual/reject/:id',
     // adminGuard.isAdmin,
 )
 
-router.post('/uploadImage',
-    uploader.single('image'),
-    BusinessRegistrationController.uploadImage,
+router.post('/uploadImage/',
+    // uploader.single('image'),
+    BusinessRegistrationController.saveImage,
     authGuard.protect
 );
 

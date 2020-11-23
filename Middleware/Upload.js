@@ -90,7 +90,7 @@ const uploadImage = async (imageData) => {
     let fileUpload = bucket.file(newFileName);
 
     var bufferStream = new stream.PassThrough();
-    bufferStream.end(Buffer.from(imageData.data));
+    bufferStream.end(Buffer.from(imageData.data,'base64'));
 
     bufferStream.pipe(fileUpload.createWriteStream({
       metadata: {

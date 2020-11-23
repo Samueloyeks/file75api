@@ -16,7 +16,7 @@ const IndividualRegistration = require('../../Models/IndividualRegistration');
 const Email = require('../../utils/email');
 const bodyParser = require('body-parser');
 const { Storage } = require('@google-cloud/storage');
-const { upload, uploadToStorage,uploadImage } = require('../../Middleware/Upload');
+const { upload, uploadToStorage, uploadImage } = require('../../Middleware/Upload');
 const User = require('../../Models/User');
 
 
@@ -78,7 +78,7 @@ exports.store = catchAsync(async (req, res, next) => {
     code: 'unattended'
   });
 
-  req.body.signature = await uploadImage(req.body.signatureImage);
+  // req.body.signature = await uploadImage(req.body.signatureImage);
 
   const assignedTo = await AdminService.getNextAdmin();
   await AdminService.updateAssignment(assignedTo._id);
@@ -600,12 +600,9 @@ exports.destroy = catchAsync(async (req, res, next) => {
 
 });
 
-exports.uploadImage = catchAsync(async (req, res, next) => {
-  console.log(req.body);
-  console.log(req.file);
-  console.log(req.files);
+exports.saveImage = catchAsync(async (req, res, next) => {
 
-  let url = await uploadImage(req.files.image);
+  let url = await uploadImage(req.body);
 
   return res.status(200).json({
     status: 'success',
