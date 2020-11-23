@@ -16,7 +16,7 @@ const uploader = multer({
 const router = express.Router();
 
 router.post('/',
-    uploader.single('signatureImage'),
+    // uploader.single('signatureImage'),
     BusinessRegistrationController.store,
     authGuard.protect
 );

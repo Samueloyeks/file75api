@@ -61,6 +61,7 @@ exports.indexIndividual = catchAsync(async (req, res, next) => {
 // save a new registration 
 // POST registration 
 exports.store = catchAsync(async (req, res, next) => {
+
   const user = await userService.getUser({
     email: req.body.email,
   });
@@ -77,7 +78,7 @@ exports.store = catchAsync(async (req, res, next) => {
     code: 'unattended'
   });
 
-  req.body.signature = await uploadImage(req.files.signatureImage);
+  req.body.signature = await uploadImage(req.body.signatureImage);
 
   const assignedTo = await AdminService.getNextAdmin();
   await AdminService.updateAssignment(assignedTo._id);
