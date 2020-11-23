@@ -604,6 +604,15 @@ exports.uploadImage = catchAsync(async (req, res, next) => {
   console.log(req.body);
   console.log(req.file);
   console.log(req.files);
+
+  let url = await uploadImage(req.files.image);
+
+  return res.status(200).json({
+    status: 'success',
+    data: {
+      url
+    },
+  });
 })
 
 
