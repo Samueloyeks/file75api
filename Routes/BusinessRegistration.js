@@ -66,7 +66,7 @@ router.put('/individual/reject/:id',
 )
 
 router.post('/uploadImage/',
-    // uploader.single('image'),
+    uploader.array("files[]", 12),
     BusinessRegistrationController.saveImage,
     authGuard.protect
 );

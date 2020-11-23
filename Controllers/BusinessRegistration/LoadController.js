@@ -602,7 +602,7 @@ exports.destroy = catchAsync(async (req, res, next) => {
 
 exports.saveImage = catchAsync(async (req, res, next) => {
 
-  let url = await uploadImage(req.body);
+  let url = await uploadImage(req.files[0]);
 
   return res.status(200).json({
     status: 'success',
