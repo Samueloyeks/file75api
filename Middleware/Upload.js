@@ -2,6 +2,8 @@ const util = require("util");
 const path = require("path");
 const multer = require("multer");
 const { Storage } = require('@google-cloud/storage');
+var stream = require('stream');
+
 
 const storage = new Storage({
   projectId: process.env.GCLOUD_PROJECT_ID,
@@ -82,7 +84,41 @@ const uploadToStorage = (file, filename) => {
   return prom;
 }
 
+const uploadImage = async (imageData) => {
+  let prom = new Promise(async (resolve, reject) => {
+    let newFileName = `${Date.now()}_${imageData.name}`;
+    let fileUpload = bucket.file(newFileName);
+
+    var bufferStream = new stream.PassThrough();
+    bufferStream.end(Buffer.from(imageData.data));
+
+    bufferStream.pipe(fileUpload.createWriteStream({
+      metadata: {
+        contentType: imageData.mimetype,
+        metadata: {
+          custom: 'metadata'
+        }
+      },
+      public: true,
+      validation: "md5"
+    }))
+      .on('error', function (err) { })
+      .on('finish', function () {
+        // The file upload is complete.
+
+        fileUpload.getSignedUrl({
+          action: 'read',
+          expires: '03-09-2491'
+        }).then(signedUrls => {
+          resolve(signedUrls[0])
+        });
+      });
+  })
+  return prom;
+}
+
 module.exports = {
   upload,
-  uploadToStorage
+  uploadToStorage,
+  uploadImage
 };
