@@ -86,7 +86,7 @@ const uploadToStorage = (file, filename) => {
 
 const uploadImage = async (imageData) => {
   let prom = new Promise(async (resolve, reject) => {
-    let newFileName = `${Date.now()}_${imageData.name}`;
+    let newFileName = `${Date.now()}_${imageData.filename}`;
     let fileUpload = bucket.file(newFileName);
 
     var bufferStream = new stream.PassThrough();
@@ -94,7 +94,7 @@ const uploadImage = async (imageData) => {
 
     bufferStream.pipe(fileUpload.createWriteStream({
       metadata: {
-        contentType: imageData.mimetype,
+        contentType: imageData.mime,
         metadata: {
           custom: 'metadata'
         }
