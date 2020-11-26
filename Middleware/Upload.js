@@ -3,6 +3,9 @@ const path = require("path");
 const multer = require("multer");
 const { Storage } = require('@google-cloud/storage');
 var stream = require('stream');
+const uuid = require('uuid')
+
+
 
 
 const storage = new Storage({
@@ -86,7 +89,7 @@ const uploadToStorage = (file, filename) => {
 
 const uploadImage = async (imageData) => {
   let prom = new Promise(async (resolve, reject) => {
-    let newFileName = `${Date.now()}-${imageData.filename}`;
+    let newFileName = `${uuid.v1()}.png`;
     let fileUpload = bucket.file(newFileName);
 
     var bufferStream = new stream.PassThrough();
@@ -95,7 +98,7 @@ const uploadImage = async (imageData) => {
     bufferStream.pipe(fileUpload.createWriteStream({
       contentType: 'application/octet-stream',
       metadata: {
-        custom: 'metadata',
+        custom: 'metadata', 
       },
       public: true,
       validation: "md5"
