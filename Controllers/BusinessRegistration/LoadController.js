@@ -47,16 +47,6 @@ exports.index = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.indexIndividual = catchAsync(async (req, res, next) => {
-  var result = await IndividualRegistrationService.getAllIndividualRegistration(req);
-
-  return res.status(200).json({
-    status: 'success',
-    data: {
-      result
-    },
-  });
-});
 
 // save a new registration 
 // POST registration 
@@ -125,85 +115,11 @@ exports.store = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.storeIndividual = catchAsync(async (req, res, next) => {
-  const user = await userService.getUser({
-    email: req.body.email,
-  });
-
-  const category = await ServiceCategoryService.getServiceCategory({
-    code: 'bus_reg'
-  });
-
-  const status = await SubmissionStatusService.getStatus({
-    code: 'pending'
-  });
-
-  const adminStatus = await AdminStatusService.getAdminStatus({
-    code: 'unattended'
-  });
-
-
-  const assignedTo = await AdminService.getNextAdmin();
-  await AdminService.updateAssignment(assignedTo._id);
-
-  req.body.user = user._id;
-  req.body.status = status._id;
-  req.body.category = category._id;
-  req.body.adminStatus = adminStatus._id;
-  req.body.assignedTo = assignedTo._id;
-  req.body.designation = 'cac';
-  req.body.responseFiles = []
-
-
-  var date = new Date();
-  req.body.submitted = Date.now();
-  req.body.expires = date.setDate(date.getDate() + 60);
-  req.body.viewed = false
-  const TransactionData = req.body.transactionData;
-
-  req.body.transactionData = null;
-  const newIndividualRegistration = await IndividualRegistrationService.createIndividualregistration(req.body);
-
-  TransactionData.user = user._id;
-  TransactionData.service = newIndividualRegistration._id;
-
-  req.body = TransactionData;
-
-  Transaction.store(req);
-
-  let title = 'New Business Registration Created';
-  let comment = await Comments.find({ title: title });
-
-  await BusinessRegistrationLog.create({
-    businessRegistration: newIndividualRegistration._id,
-    comment: comment[0]._id,
-    user: user._id,
-    admin: assignedTo._id
-  });
-
-  return res.status(200).json({
-    status: 'success',
-    data: {
-      newIndividualRegistration
-    },
-  });
-});
 
 // get a single registration 
 // GET registration/:id
 exports.show = catchAsync(async (req, res, next) => {
   const result = await BusinessRegistrationService.getBusinessRegistration(req.params);
-
-  return res.status(200).json({
-    status: 'success',
-    data: {
-      result
-    },
-  });
-});
-
-exports.showIndividual = catchAsync(async (req, res, next) => {
-  const result = await IndividualRegistrationService.getIndividualRegistration(req.params);
 
   return res.status(200).json({
     status: 'success',
@@ -240,35 +156,6 @@ exports.deploy = catchAsync(async (req, res, next) => {
     status: 'success',
     data: {
       updatedBusinessRegistration
-    },
-  });
-});
-
-exports.deployIndividual = catchAsync(async (req, res, next) => {
-
-  const adminStatus = await AdminStatusService.getAdminStatus({
-    code: 'deployed'
-  });
-
-  const updatedIndividualRegistration = await IndividualRegistration.update({ _id: req.body._id },
-    { $set: { "adminStatus": adminStatus._id } }, { multi: true })
-
-  const individualRegistration = await IndividualRegistration.find({ _id: req.body._id });
-
-  let title = 'Business Registration Deployed';
-  let comment = await Comments.find({ title: title });
-
-  await BusinessRegistrationLog.create({
-    businessRegistration: individualRegistration[0]._id,
-    comment: comment[0]._id,
-    user: individualRegistration[0].user,
-    admin: individualRegistration[0].assignedTo
-  });
-
-  return res.status(200).json({
-    status: 'success',
-    data: {
-      updatedIndividualRegistration
     },
   });
 });
@@ -337,86 +224,6 @@ exports.finish = catchAsync(async (req, res, next) => {
       status: 'success',
       data: {
         businessRegistration
-      },
-    });
-
-    // res
-    //   .status(200)
-    //   .send(urls);
-
-  } catch (error) {
-    console.log(error)
-    console.log('unable to upload')
-    res.status(400).send(`Error, could not upload file: ${error}`);
-    return;
-  }
-
-});
-
-exports.finishIndividual = catchAsync(async (req, res, next) => {
-
-  try {
-
-    if (!req.files) {
-      console.log('no files')
-      res.status(400).send('Error, could not upload file');
-      return;
-    }
-
-    let urls = []
-
-
-    if (Array.isArray(req.files.responseFiles)) {
-      for (var file of req.files.responseFiles) {
-        const url = await uploadToStorage(file)
-        urls.push(url)
-      }
-    } else {
-      const url = await uploadToStorage(req.files.responseFiles)
-      urls.push(url)
-    }
-
-    const adminStatus = await AdminStatusService.getAdminStatus({
-      code: 'finished'
-    });
-
-    const status = await SubmissionStatusService.getStatus({
-      code: 'approved'
-    });
-
-    const updatedIndividualRegistration = await IndividualRegistration.update({ _id: req.params.id },
-      {
-        $set: {
-          "adminStatus": adminStatus._id,
-          "status": status._id,
-          "responseFiles": urls
-        },
-      },
-      { multi: true }
-    )
-
-
-    const individualRegistration = await IndividualRegistration.find({ _id: req.params.id })
-    const user = await User.findById(individualRegistration[0].user);
-
-    const email = new Email(user, null, urls)
-
-    email.send('businessRegistrationApproved', 'Business Registration Approved')
-
-    let title = 'Business Registration Completed';
-    let comment = await Comments.find({ title: title });
-
-    await BusinessRegistrationLog.create({
-      businessRegistration: individualRegistration[0]._id,
-      comment: comment[0]._id,
-      user: individualRegistration[0].user,
-      admin: individualRegistration[0].assignedTo
-    });
-
-    return res.status(200).json({
-      status: 'success',
-      data: {
-        individualRegistration
       },
     });
 
@@ -513,87 +320,6 @@ exports.reject = catchAsync(async (req, res, next) => {
 
 });
 
-exports.rejectIndividual = catchAsync(async (req, res, next) => {
-
-  try {
-
-    if (!req.files) {
-      console.log('no files')
-      res.status(400).send('Error, could not upload file');
-      return;
-    }
-
-    let urls = []
-
-
-    if (Array.isArray(req.files.responseFiles)) {
-      for (var file of req.files.responseFiles) {
-        const url = await uploadToStorage(file)
-        urls.push(url)
-      }
-    } else {
-      const url = await uploadToStorage(req.files.responseFiles)
-      urls.push(url)
-    }
-
-    const adminStatus = await AdminStatusService.getAdminStatus({
-      code: 'rejected'
-    });
-
-    const status = await SubmissionStatusService.getStatus({
-      code: 'rejected'
-    });
-
-    const updatedIndividualRegistration = await IndividualRegistration.update({ _id: req.params.id },
-      {
-        $set: {
-          "adminStatus": adminStatus._id,
-          "status": status._id,
-          "responseFiles": urls
-        },
-      },
-      { multi: true }
-    )
-
-
-    const individualRegistration = await IndividualRegistration.find({ _id: req.params.id })
-    const user = await User.findById(individualRegistration[0].user);
-
-    const email = new Email(user, null, urls)
-
-    email.send('businessRegistrationDeclined', 'Business Registration Declined')
-
-    let title = 'Business Registration Rejected';
-    let comment = await Comments.find({ title: title });
-
-    await BusinessRegistrationLog.create({
-      businessRegistration: individualRegistration[0]._id,
-      comment: comment[0]._id,
-      user: individualRegistration[0].user,
-      admin: individualRegistration[0].assignedTo
-    });
-
-    return res.status(200).json({
-      status: 'success',
-      data: {
-        individualRegistration
-      },
-    });
-
-    // res
-    //   .status(200)
-    //   .send(urls);
-
-  } catch (error) {
-    console.log(error)
-    console.log('unable to upload')
-    res.status(400).send(`Error, could not upload file: ${error}`);
-    return;
-  }
-
-});
-
-
 // delete registration with id
 // DELETE registrations/:id
 exports.destroy = catchAsync(async (req, res, next) => {
@@ -610,7 +336,7 @@ exports.saveImage = catchAsync(async (req, res, next) => {
     data: {
       url
     },
-  });  
+  });
 })
 
 

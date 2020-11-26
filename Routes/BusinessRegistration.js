@@ -24,7 +24,7 @@ router.get('/', BusinessRegistrationController.index, authGuard.protect);
 router.get('/:id', BusinessRegistrationController.show, authGuard.protect);
 router.put('/deploy/:id',
     BusinessRegistrationController.deploy,
-    // authGuard.protect,
+    authGuard.protect,
     // adminGuard.isAdmin,
 )
 
@@ -38,29 +38,6 @@ router.put('/finish/:id',
 router.put('/reject/:id',
     uploader.single('responseFiles', 5),
     BusinessRegistrationController.reject,
-    authGuard.protect,
-    // adminGuard.isAdmin,
-)
-
-router.post('/individual/', BusinessRegistrationController.storeIndividual, authGuard.protect);
-router.get('/individual/', BusinessRegistrationController.indexIndividual, authGuard.protect);
-router.get('/individual/:id', BusinessRegistrationController.showIndividual, authGuard.protect);
-router.put('/individual/deploy/:id',
-    BusinessRegistrationController.deployIndividual,
-    // authGuard.protect,
-    // adminGuard.isAdmin,
-)
-
-router.put('/individual/finish/:id',
-    uploader.single('responseFiles', 5),
-    BusinessRegistrationController.finishIndividual,
-    authGuard.protect,
-    // adminGuard.isAdmin,
-)
-
-router.put('/individual/reject/:id',
-    uploader.single('responseFiles', 5),
-    BusinessRegistrationController.rejectIndividual,
     authGuard.protect,
     // adminGuard.isAdmin,
 )

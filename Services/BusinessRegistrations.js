@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const BusinessRegistration = require('../Models/BusinessRegistration');
+const IndividualRegistration = require('../Models/IndividualRegistration');
 const SubmissionStatuses = require('../Models/SubmissionStatuses');
 const AdminStatuses = require('../Models/AdminStatuses');
 const ServiceCategories = require('../Models/ServiceCategories');
@@ -32,7 +33,21 @@ exports.createBusinessregistration = async (req) => {
         expires: req.expires,
         viewed: req.viewed,
         designation: req.designation,
-        responseFiles:req.responseFiles
+        responseFiles:req.responseFiles,
+
+        type:req.type,
+        principalAddress: req.principalAddress,
+        branchAddress: req.branchAddress,
+        businessCategory: req.businessCategory,
+        surname: req.surname,
+        age: req.age,
+        sex: req.sex,
+        address: req.address,
+        occupation: req.occupation,
+        nationality: req.nationality,
+        state: req.state,
+        city: req.city,
+        passport: req.passport,
     });
 };
 
@@ -59,6 +74,7 @@ exports.getAllBusinessRegistrations= async (req) => {
     } = req.query;
 
     var query = BusinessRegistration.find();
+
     const skip = parseInt((page - 1) * perPage);
     const pageLimit = parseInt(perPage)
 
@@ -72,6 +88,7 @@ exports.getAllBusinessRegistrations= async (req) => {
             "assignedTo": byAdminId,
             "designation": { $in: designations }
         });
+
     }
 
     if (associations.length > 0) {
@@ -99,7 +116,7 @@ exports.getAllBusinessRegistrations= async (req) => {
     }
 
     if (search) query = query.find({ $text: { $search: search } });
-
+    
     return await query.skip(skip).sort([['_id', -1]]).limit(pageLimit);
 };
 

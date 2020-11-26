@@ -8,11 +8,11 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const BusinessRegistrationSchema = new Schema({
     corporateName: {
         type: String,
-        required: [true, 'Please provide corporate name!'],
+        // required: [true, 'Please provide corporate name!'],
     },
     companyNo: {
         type: String,
-        required: [true, 'Please provide company number!'],
+        // required: [true, 'Please provide company number!'],
     },
     businessName1: {
         type: String,
@@ -21,6 +21,10 @@ const BusinessRegistrationSchema = new Schema({
     businessName2: {
         type: String,
         required: [true, 'Please provide second business name!'],
+    },
+    type: {
+        type: String,
+        required: [true, 'Please provide registration type!'],
     },
     phone: {
         type: String,
@@ -36,7 +40,7 @@ const BusinessRegistrationSchema = new Schema({
     },
     companyDesignation: {
         type: String,
-        required: [true, 'Please provide designation'],
+        // required: [true, 'Please provide designation'],
     },
     signature: {
         type: String,
@@ -45,6 +49,54 @@ const BusinessRegistrationSchema = new Schema({
     charge: {
         type: String,
         required: [true, 'Please provide service charge'],
+    },
+    principalAddress: {
+        type: String,
+        // required: [true, 'Please provide principal address'],
+    },
+    branchAddress: {
+        type: String,
+        // required: [true, 'Please provide branch address'],
+    },
+    businessCategory: {
+        type: String,
+        // required: [true, 'Please provide business type'],
+    },
+    surname: {
+        type: String,
+        // required: [true, 'Please tell us your surname!'],
+    },
+    age: {
+        type: Number,
+        // required: [true, 'Please provide age!'],
+    },
+    sex: {
+        type: String,
+        // required: [true, 'Please tell us your sex!'],
+    },
+    address: {
+        type: String,
+        // required: [true, 'Please provide address'],
+    },
+    occupation: {
+        type: String,
+        // required: [true, 'Please provide occupation'],
+    },
+    nationality: {
+        type: String,
+        // required: [true, 'Please provide nationality'],
+    },
+    state: {
+        type: String,
+        // required: [true, 'Please provide state'],
+    },
+    city: {
+        type: String,
+        // required: [true, 'Please provide city'],
+    },
+    passport: {
+        type: String,
+        // required: [true, 'Please provide passport'],
     },
     email: {
         type: String,

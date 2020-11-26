@@ -86,18 +86,16 @@ const uploadToStorage = (file, filename) => {
 
 const uploadImage = async (imageData) => {
   let prom = new Promise(async (resolve, reject) => {
-    let newFileName = `${Date.now()}_${imageData.filename}`;
+    let newFileName = `${Date.now()}-${imageData.filename}`;
     let fileUpload = bucket.file(newFileName);
 
     var bufferStream = new stream.PassThrough();
     bufferStream.end(Buffer.from(imageData.data,'base64'));
 
     bufferStream.pipe(fileUpload.createWriteStream({
+      contentType: 'application/octet-stream',
       metadata: {
-        contentType: imageData.mime,
-        metadata: {
-          custom: 'metadata'
-        }
+        custom: 'metadata',
       },
       public: true,
       validation: "md5"
@@ -105,13 +103,18 @@ const uploadImage = async (imageData) => {
       .on('error', function (err) { })
       .on('finish', function () {
         // The file upload is complete.
+        const publicUrl = 
+        // `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURI(fileUpload.name)}`;
+          `https://storage.googleapis.com/${bucket.name}/${encodeURI(fileUpload.name)}`
+        resolve(publicUrl)
 
-        fileUpload.getSignedUrl({
-          action: 'read',
-          expires: '03-09-2491'
-        }).then(signedUrls => {
-          resolve(signedUrls[0])
-        });
+        // fileUpload.getSignedUrl({
+        //   action: 'read',
+        //   expires: '03-09-2491'
+        // }).then(signedUrls => {
+        //   resolve(signedUrls[0])
+        // });
+
       });
   })
   return prom;
