@@ -88,7 +88,6 @@ const uploadToStorage = (file, filename) => {
 }
 
 const uploadImage = async (imageData) => {
-  console.log(imageData);
   let prom = new Promise(async (resolve, reject) => {
     let newFileName = `${uuid.v1()}.png`;
     let fileUpload = bucket.file(newFileName);
@@ -104,7 +103,7 @@ const uploadImage = async (imageData) => {
       public: true,
       validation: "md5"
     }))
-      .on('error', function (err) { })
+      .on('error', function (err) { console.log(err);})
       .on('finish', function () {
         // The file upload is complete.
         const publicUrl = 
