@@ -88,6 +88,7 @@ const uploadToStorage = (file, filename) => {
 }
 
 const uploadImage = async (imageData) => {
+  console.log(imageData);
   let prom = new Promise(async (resolve, reject) => {
     let newFileName = `${uuid.v1()}.png`;
     let fileUpload = bucket.file(newFileName);
