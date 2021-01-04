@@ -16,11 +16,11 @@ const BusinessRegistrationSchema = new Schema({
     },
     businessName1: {
         type: String,
-        required: [true, 'Please provide business name!'],
+        // required: [true, 'Please provide business name!'],
     },
     businessName2: {
         type: String,
-        required: [true, 'Please provide second business name!'],
+        // required: [true, 'Please provide second business name!'],
     },
     type: {
         type: String,
@@ -32,7 +32,7 @@ const BusinessRegistrationSchema = new Schema({
     },
     availabilityCode: {
         type: String,
-        required: [true, 'Please provide availability code'],
+        // required: [true, 'Please provide availability code'],
     },
     fullName: {
         type: String,

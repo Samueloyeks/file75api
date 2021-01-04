@@ -1,6 +1,6 @@
 const catchAsync = require('../../utils/catchAsync');
 const AppError = require('../../utils/appError');
-const BusinessRegistrationService = require('../../Services/BusinessRegistrations');
+const CompanyRegistrationService = require('../../Services/CompanyRegistrations');
 const IndividualRegistrationService = require('../../Services/IndividualRegistrations');
 const userService = require('../../Services/User');
 const ServiceCategoryService = require('../../Services/ServiceCategories');
@@ -8,10 +8,10 @@ const SubmissionStatusService = require('../../Services/SubmissionStatuses');
 const AdminStatusService = require('../../Services/AdminStatuses');
 const DesignationService = require('../../Services/Designations');
 const AdminService = require('../../Services/Admin');
-const BusinessRegistrationLog = require('../../Models/BusinessRegistrationLog');
+const CompanyRegistrationLog = require('../../Models/CompanyRegistrationLog');
 const Comments = require('../../Models/Comments');
 const Transaction = require('../Transactions/LoadController');
-const BusinessRegistration = require('../../Models/BusinessRegistration');
+const CompanyRegistration = require('../../Models/CompanyRegistration');
 const IndividualRegistration = require('../../Models/IndividualRegistration');
 const Email = require('../../utils/email');
 const bodyParser = require('body-parser');
@@ -31,13 +31,13 @@ const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET_URL);
 
 
 
-exports.getBusinessRegistration = (req, res, next) =>
-  BusinessRegistrationService.getBusinessRegistrationDefault(req, res, next);
+exports.getCompanyRegistration = (req, res, next) =>
+  CompanyRegistrationService.getCompanyRegistrationDefault(req, res, next);
 
 // show all registrations 
 // GET registrations
 exports.index = catchAsync(async (req, res, next) => {
-  var result = await BusinessRegistrationService.getAllBusinessRegistrations(req);
+  var result = await CompanyRegistrationService.getAllCompanyRegistrations(req);
 
   return res.status(200).json({
     status: 'success',
@@ -57,7 +57,7 @@ exports.store = catchAsync(async (req, res, next) => {
   });
 
   const category = await ServiceCategoryService.getServiceCategory({
-    code: 'business_reg'
+    code: 'company_reg'
   });
 
   const status = await SubmissionStatusService.getStatus({
@@ -81,7 +81,6 @@ exports.store = catchAsync(async (req, res, next) => {
   req.body.designation = 'cac';
   req.body.responseFiles = []
 
-
   var date = new Date();
   req.body.submitted = Date.now(); 
   req.body.expires = date.setDate(date.getDate() + 60);
@@ -89,19 +88,19 @@ exports.store = catchAsync(async (req, res, next) => {
   const TransactionData = req.body.transactionData;
 
   req.body.transactionData = null;
-  const newBusinessRegistration = await BusinessRegistrationService.createBusinessregistration(req.body);
+  const newCompanyRegistration = await CompanyRegistrationService.createCompanyregistration(req.body);
   TransactionData.user = user._id;
-  TransactionData.service = newBusinessRegistration._id;
+  TransactionData.service = newCompanyRegistration._id;
 
   req.body = TransactionData;
 
   Transaction.store(req);
 
-  let title = 'New Business Registration Created';
+  let title = 'New Company Registration Created';
   let comment = await Comments.find({ title: title });
 
-  await BusinessRegistrationLog.create({
-    businessRegistration: newBusinessRegistration._id,
+  await CompanyRegistrationLog.create({
+    companyRegistration: newCompanyRegistration._id,
     comment: comment[0]._id,
     user: user._id,
     admin: assignedTo._id
@@ -110,7 +109,7 @@ exports.store = catchAsync(async (req, res, next) => {
   return res.status(200).json({
     status: 'success',
     data: {
-      newBusinessRegistration
+      newCompanyRegistration
     },
   });
 });
@@ -119,7 +118,7 @@ exports.store = catchAsync(async (req, res, next) => {
 // get a single registration 
 // GET registration/:id
 exports.show = catchAsync(async (req, res, next) => {
-  const result = await BusinessRegistrationService.getBusinessRegistration(req.params);
+  const result = await CompanyRegistrationService.getCompanyRegistration(req.params);
 
   return res.status(200).json({
     status: 'success',
@@ -137,25 +136,25 @@ exports.deploy = catchAsync(async (req, res, next) => {
     code: 'deployed'
   });
 
-  const updatedBusinessRegistration = await BusinessRegistration.update({ _id: req.body._id },
+  const updatedCompanyRegistration = await CompanyRegistration.update({ _id: req.body._id },
     { $set: { "adminStatus": adminStatus._id } }, { multi: true })
 
-  const businessRegistration = await BusinessRegistration.find({ _id: req.body._id });
+  const companyRegistration = await CompanyRegistration.find({ _id: req.body._id });
 
-  let title = 'Business Registration Deployed';
+  let title = 'Company Registration Deployed';
   let comment = await Comments.find({ title: title });
 
-  await BusinessRegistrationLog.create({
-    businessRegistration: businessRegistration[0]._id,
+  await CompanyRegistrationLog.create({
+    companyRegistration: companyRegistration[0]._id,
     comment: comment[0]._id,
-    user: businessRegistration[0].user,
-    admin: businessRegistration[0].assignedTo
+    user: companyRegistration[0].user,
+    admin: companyRegistration[0].assignedTo
   });
 
   return res.status(200).json({
     status: 'success',
     data: {
-      updatedBusinessRegistration
+      updatedCompanyRegistration
     },
   });
 });
@@ -191,7 +190,7 @@ exports.finish = catchAsync(async (req, res, next) => {
       code: 'approved'
     });
 
-    const updatedBusinessRegistration = await BusinessRegistration.update({ _id: req.params.id },
+    const updatedCompanyRegistration = await CompanyRegistration.update({ _id: req.params.id },
       {
         $set: {
           "adminStatus": adminStatus._id,
@@ -203,27 +202,27 @@ exports.finish = catchAsync(async (req, res, next) => {
     )
 
 
-    const businessRegistration = await BusinessRegistration.find({ _id: req.params.id })
-    const user = await User.findById(businessRegistration[0].user);
+    const companyRegistration = await CompanyRegistration.find({ _id: req.params.id })
+    const user = await User.findById(companyRegistration[0].user);
 
     const email = new Email(user, null, urls)
 
-    email.send('businessRegistrationApproved', 'Business Registration Approved')
+    email.send('companyRegistrationApproved', 'Company Registration Approved')
 
-    let title = 'Business Registration Completed';
+    let title = 'Company Registration Completed';
     let comment = await Comments.find({ title: title });
 
-    await BusinessRegistrationLog.create({
-      businessRegistration: businessRegistration[0]._id,
+    await CompanyRegistrationLog.create({
+      companyRegistration: companyRegistration[0]._id,
       comment: comment[0]._id,
-      user: businessRegistration[0].user,
-      admin: businessRegistration[0].assignedTo
+      user: companyRegistration[0].user,
+      admin: companyRegistration[0].assignedTo
     });
 
     return res.status(200).json({
       status: 'success',
       data: {
-        businessRegistration
+        companyRegistration
       },
     });
 
@@ -271,7 +270,7 @@ exports.reject = catchAsync(async (req, res, next) => {
       code: 'rejected'
     });
 
-    const updatedBusinessRegistration = await BusinessRegistration.update({ _id: req.params.id },
+    const updatedCompanyRegistration = await CompanyRegistration.update({ _id: req.params.id },
       {
         $set: {
           "adminStatus": adminStatus._id,
@@ -283,27 +282,27 @@ exports.reject = catchAsync(async (req, res, next) => {
     )
 
 
-    const businessRegistration = await BusinessRegistration.find({ _id: req.params.id })
-    const user = await User.findById(businessRegistration[0].user);
+    const companyRegistration = await CompanyRegistration.find({ _id: req.params.id })
+    const user = await User.findById(companyRegistration[0].user);
 
     const email = new Email(user, null, urls)
 
-    email.send('businessRegistrationDeclined', 'Business Registration Declined')
+    email.send('companyRegistrationDeclined', 'Company Registration Declined')
 
-    let title = 'Business Registration Rejected';
+    let title = 'Company Registration Rejected';
     let comment = await Comments.find({ title: title });
 
-    await BusinessRegistrationLog.create({
-      businessRegistration: businessRegistration[0]._id,
+    await CompanyRegistrationLog.create({
+      companyRegistration: companyRegistration[0]._id,
       comment: comment[0]._id,
-      user: businessRegistration[0].user,
-      admin: businessRegistration[0].assignedTo
+      user: companyRegistration[0].user,
+      admin: companyRegistration[0].assignedTo
     });
 
     return res.status(200).json({
       status: 'success',
       data: {
-        businessRegistration
+        companyRegistration
       },
     });
 

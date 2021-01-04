@@ -3,6 +3,7 @@ const catchAsync = require('../../utils/catchAsync');
 const AppError = require('../../utils/appError');
 const Email = require('../../utils/email');
 const userService = require('../../Services/User');
+const User = require('../../Models/User');
 
 
 
@@ -205,6 +206,22 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 4) Log user in, send JWT
   return userService.createSendToken(user, 200, res);
 });
+
+exports.updateUser = catchAsync(async(req,res,next)=>{
+
+  await User.update({ _id: req.params.id },
+    {
+      $set: {
+        "fullName": req.params.fullName,
+        "phone": req.params.phone,
+        "passport": req.params.passport,
+        "signature": req.params.signature
+      },
+    },
+    { multi: true }
+  )
+
+})
 
 exports.logout = (req, res) => {
   res.cookie('jwt', 'loggedOut', {

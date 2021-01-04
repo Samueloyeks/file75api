@@ -88,21 +88,25 @@ const data = [
                 'code': 'name_rsv',
                 'category': 'Name Reservation',
                 'description': 'Reserve your business name',
+                'id': '1'
             },
             {
                 'code': 'business_reg',
                 'category': 'Business Name Registration',
                 'description': 'Complete registration process for your business',
+                'id': '2'
             },
             {
                 'code': 'company_reg',
                 'category': 'Company Registration',
                 'description': 'Complete registration process for your company',
+                'id': '3'
             },
             {
                 'code': 'licensing',
                 'category': 'Licensing',
                 'description': 'Get a License',
+                'id': '4'
             },
         ]
     },
@@ -141,6 +145,18 @@ const data = [
             },
             {
                 'title': 'Business Registration  Rejected',
+            },
+            {
+                'title': 'New Company Registration Created',
+            },
+            {
+                'title': 'Company Registration Deployed',
+            },
+            {
+                'title': 'Company Registration Completed',
+            },
+            {
+                'title': 'Company Registration  Rejected',
             },
         ]
     },
