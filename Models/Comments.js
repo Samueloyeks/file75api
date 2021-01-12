@@ -7,6 +7,9 @@ const CommentsSchema = new mongoose.Schema({
     title: {
         type: String
     },
+    code: {
+        type: String
+    },
     created_at: {
         type: Date,
         default: Date.now,

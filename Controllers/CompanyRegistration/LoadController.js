@@ -1,6 +1,7 @@
 const catchAsync = require('../../utils/catchAsync');
 const AppError = require('../../utils/appError');
 const CompanyRegistrationService = require('../../Services/CompanyRegistrations');
+const BusinessObjectsService = require('../../Services/BusinessObjects');
 const IndividualRegistrationService = require('../../Services/IndividualRegistrations');
 const userService = require('../../Services/User');
 const ServiceCategoryService = require('../../Services/ServiceCategories');
@@ -18,6 +19,11 @@ const bodyParser = require('body-parser');
 const { Storage } = require('@google-cloud/storage');
 const { upload, uploadToStorage, uploadImage } = require('../../Middleware/Upload');
 const User = require('../../Models/User');
+const PdfHandler = require('../../utils/pdfHandler');
+var pdf = require("pdf-creator-node");
+var fs = require('fs');
+const PDFDocument = require('pdfkit');
+
 
 
 
@@ -79,7 +85,7 @@ exports.store = catchAsync(async (req, res, next) => {
   req.body.adminStatus = adminStatus._id;
   req.body.assignedTo = assignedTo._id;
   req.body.designation = 'cac';
-  req.body.responseFiles = []
+  req.body.responseFiles = [];
 
   var date = new Date();
   req.body.submitted = Date.now(); 
@@ -92,9 +98,14 @@ exports.store = catchAsync(async (req, res, next) => {
   TransactionData.user = user._id;
   TransactionData.service = newCompanyRegistration._id;
 
+  const pdfhandler = new PdfHandler(req.body);
+
+  await pdfhandler.generateMOA()
+
   req.body = TransactionData;
 
   Transaction.store(req);
+
 
   let title = 'New Company Registration Created';
   let comment = await Comments.find({ title: title });
@@ -337,6 +348,17 @@ exports.saveImage = catchAsync(async (req, res, next) => {
     },
   });
 })
+
+exports.getBusinessObjects = catchAsync(async (req, res, next) => {
+  const result = await BusinessObjectsService.getAllBusinessObjects(req);
+
+  return res.status(200).json({
+    status: 'success',
+    data: {
+      result
+    },
+  });
+});
 
 
 

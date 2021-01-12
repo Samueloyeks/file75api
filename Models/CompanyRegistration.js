@@ -62,13 +62,91 @@ const DirectorSchema = new Schema({
     state: {
         type: String,
         required: [true, 'Please provide director state'],
-    },
+    }
 });
 
 const ShareholderSchema = new Schema({
-    amountOfShares: {
+    city: {
         type: String,
-        required: [true, 'Please provide amount of shares'],
+        required: [true, 'Please provide shareholder city'],
+    },
+    country: {
+        type: String,
+        required: [true, 'Please provide shareholder country'],
+    },
+    dob: {
+        type: String,
+        required: [true, 'Please provide shareholder date of birth'],
+    },
+    document: {
+        type: String,
+        required: [true, 'Please provide shareholder document'],
+    },
+    documentId: {
+        type: String,
+        required: [true, 'Please provide shareholder document id'],
+    },
+    documentType: {
+        type: String,
+        required: [true, 'Please provide shareholder document type'],
+    },
+    email: {
+        type: String,
+        required: [true, 'Please provide shareholder email'],
+        lowercase: true,
+        validate: [validator.isEmail, 'Please provide a valid email'],
+    },
+    fullName: {
+        type: String,
+        required: [true, 'Please provide shareholder full name'],
+    },
+    index: {
+        type: String,
+    },
+    phone: {
+        type: String,
+        required: [true, 'Please provide shareholder full name'],
+    },
+    amountOfShares: {
+        type: String
+    },
+    amountOfShares2: {
+        type: String
+    },
+    sharesInUnits: {
+        type: String,
+        required: [true, 'Please provide shares in units'],
+    },
+    sharesPercentage: {
+        type: String,
+        required: [true, 'Please provide shares in percentage'],
+    },
+    residence: {
+        type: String,
+        required: [true, 'Please provide shareholder residence'],
+    },
+    sex: {
+        type: String,
+        required: [true, 'Please provide shareholder gender'],
+    },
+    signature: {
+        type: String,
+        required: [true, 'Please provide shareholder signature'],
+    },
+    state: {
+        type: String,
+        required: [true, 'Please provide shareholder state'],
+    }
+});
+
+const GuarantorSchema = new Schema({
+    amountGuaranteed: {
+        type: String,
+        required: [true, 'Please provide amount guaranteed'],
+    },
+    amountGuaranteedWords: {
+        type: String,
+        required: [true, 'Please provide amount guaranteed in words'],
     },
     city: {
         type: String,
@@ -111,10 +189,6 @@ const ShareholderSchema = new Schema({
         type: String,
         required: [true, 'Please provide shareholder full name'],
     },
-    pricePerShare: {
-        type: String,
-        required: [true, 'Please provide price per share'],
-    },
     residence: {
         type: String,
         required: [true, 'Please provide shareholder residence'],
@@ -123,10 +197,6 @@ const ShareholderSchema = new Schema({
         type: String,
         required: [true, 'Please provide shareholder gender'],
     },
-    shareCapital: {
-        type: String,
-        required: [true, 'Please provide share capital'],
-    },
     signature: {
         type: String,
         required: [true, 'Please provide shareholder signature'],
@@ -134,11 +204,7 @@ const ShareholderSchema = new Schema({
     state: {
         type: String,
         required: [true, 'Please provide shareholder state'],
-    },
-    valueOfShares: {
-        type: String,
-        required: [true, 'Please provide value of shares'],
-    },
+    }
 });
 
 const SecretarySchema = new Schema({
@@ -193,11 +259,11 @@ const SecretarySchema = new Schema({
 const CompanyRegistrationSchema = new Schema({
     companyName1: {
         type: String,
-        required: [true, 'Please provide company name!'],
+        // required: [true, 'Please provide company name!'],
     },
     companyName2: {
         type: String,
-        required: [true, 'Please provide second company name!'],
+        // required: [true, 'Please provide second company name!'],
     },
     type: {
         type: String,
@@ -211,6 +277,7 @@ const CompanyRegistrationSchema = new Schema({
         type: String,
         // required: [true, 'Please provide availability code'],
     },
+    businessObject: Object,
     charge: {
         type: String,
         required: [true, 'Please provide service charge'],
@@ -229,7 +296,7 @@ const CompanyRegistrationSchema = new Schema({
     },
     address: {
         type: String,
-        required: [true, 'Please provide address'],
+        // required: [true, 'Please provide address'],
     },
     email: {
         type: String,
@@ -244,7 +311,17 @@ const CompanyRegistrationSchema = new Schema({
         validate: [validator.isEmail, 'Please provide a valid email'],
     },
     directors: [DirectorSchema],
+    shareCapitalUnits: {
+        type: String,
+    },
+    pricePerShare: {
+        type: String,
+    },
+    valueOfShares: {
+        type: String,
+    },
     shareholders: [ShareholderSchema],
+    guarantors: [GuarantorSchema],
     secretary: {
         address: {
             type: String,
@@ -292,6 +369,29 @@ const CompanyRegistrationSchema = new Schema({
             type: String,
             required: [true, 'Please provide secreatary signature'],
         }
+    },
+    totalGuarantee: {
+        type: Number
+    },
+    companyType: {
+        type: String,
+        // required: [true, 'Please provide company type'],
+    },
+    witnessName: {
+        type: String,
+        required: [true, 'Please provide witness name'],
+    },
+    witnessAddress: {
+        type: String,
+        required: [true, 'Please provide witness address'],
+    },
+    witnessOccupation: {
+        type: String,
+        required: [true, 'Please provide witness occupation'],
+    },
+    witnessSignature: {
+        type: String,
+        required: [true, 'Please provide witness signature'],
     },
     user: {
         // type: String,
