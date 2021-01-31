@@ -12,7 +12,7 @@ const ReservationSchema = new Schema({
     },
     companyName2: {
         type: String,
-        required: [true, 'Please provide second company name!'],
+        // required: [true, 'Please provide second company name!'],
     },
     phone: {
         type: String,
@@ -27,6 +27,28 @@ const ReservationSchema = new Schema({
         required: [true, 'Please provide user email'],
         lowercase: true,
         validate: [validator.isEmail, 'Please provide a valid email'],
+    },
+    additionalComment: {
+        type: String,
+    },
+    natureOfBusiness: {
+        type: String,
+    },
+    specificBusinessType: {
+        type: String,
+    },
+    specificNature: {
+        type: String,
+    },
+    type: {
+        type: String,
+        required: [true, 'Please provide reservation type'],
+    },
+    companyReservationType: {
+        type: String,
+    },
+    companyType: {
+        type: String,
     },
     user: {
         // type: String,
@@ -62,7 +84,7 @@ const ReservationSchema = new Schema({
     submitted: Date,
     expires: Date,
     viewed: Boolean,
-    responseFiles:[String],
+    responseFiles: [String],
     created_at: {
         type: Date,
         default: Date.now,

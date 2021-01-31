@@ -106,7 +106,7 @@ const data = [
             },
             {
                 'code': 'licensing',
-                'category': 'Licensing',
+                'category': 'Licensing/Permits',
                 'description': 'Get a License',
                 'id': '4'
             },

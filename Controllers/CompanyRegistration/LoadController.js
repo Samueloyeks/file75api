@@ -88,7 +88,7 @@ exports.store = catchAsync(async (req, res, next) => {
   req.body.responseFiles = [];
 
   var date = new Date();
-  req.body.submitted = Date.now(); 
+  req.body.submitted = Date.now();
   req.body.expires = date.setDate(date.getDate() + 60);
   req.body.viewed = false
   const TransactionData = req.body.transactionData;
@@ -99,8 +99,23 @@ exports.store = catchAsync(async (req, res, next) => {
   TransactionData.service = newCompanyRegistration._id;
 
   const pdfhandler = new PdfHandler(req.body);
+  const attachmentPaths = []
 
-  await pdfhandler.generateMOA()
+  if (req.body.type === 'limitedByGuarantee') {
+
+  } else {
+    const moa_pdf_name = await pdfhandler.generateMOA();
+    attachmentPaths.push(moa_pdf_name)
+  }
+
+
+  const email = new Email(user, null, [], attachmentPaths)
+
+  email.send('documentsGenerated', 'Company Registration Received')
+
+  // for (var path of attachmentPaths) {
+  //   fs.unlinkSync(`files/${path}`)
+  // }
 
   req.body = TransactionData;
 

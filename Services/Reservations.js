@@ -17,6 +17,13 @@ exports.createReservation = async (req) => {
         phone: req.phone,
         charge: req.charge,
         email: req.email,
+        additionalComment: req.additionalComment,
+        natureOfBusiness: req.natureOfBusiness,
+        specificBusinessType: req.specificBusinessType,
+        specificNature: req.specificNature,
+        type: req.type,
+        companyReservationType:req.companyReservationType,
+        companyType:req.companyType,
         user: req.user,
         status: req.status,
         category: req.category,
@@ -26,7 +33,7 @@ exports.createReservation = async (req) => {
         expires: req.expires,
         viewed: req.viewed,
         designation: req.designation,
-        responseFiles:req.responseFiles
+        responseFiles: req.responseFiles
     });
 };
 
@@ -43,12 +50,12 @@ exports.getAllReservations = async (req) => {
     const {
         associations = [],
         page = 1,
-        perPage = 30,
+        perPage = 15,
         search = null,
         byUserId = null,
         byAdminId = null,
         byStatusCode = null,
-        byAdminStatusCode=null,
+        byAdminStatusCode = null,
         byCategorycode = null
     } = req.query;
 
