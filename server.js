@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const { ObjectID } = require('mongodb');
+
 
 /**
  * @param {string} process.env.DATABASE
@@ -22,14 +24,14 @@ const app = require('./app');
 let DB = process.env.DATABASE.replace(
   '<password>',
   process.env.DATABASE_PASSWORD
-); 
+);
 DB = DB.replace('<dbname>', process.env.DATABASE_NAME);
 // let DB = process.env.DATABASE_LOCAL;
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true, 
+    useUnifiedTopology: true,
   })
   // eslint-disable-next-line no-console
   .then(() => console.log('DB connection successful!'));
@@ -39,6 +41,7 @@ const server = app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`App running on port ${port}...`);
 });
+
 
 process.on('unhandledRejection', (err) => {
   // eslint-disable-next-line no-console

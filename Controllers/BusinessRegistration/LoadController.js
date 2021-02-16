@@ -2,6 +2,7 @@ const catchAsync = require('../../utils/catchAsync');
 const AppError = require('../../utils/appError');
 const BusinessRegistrationService = require('../../Services/BusinessRegistrations');
 const IndividualRegistrationService = require('../../Services/IndividualRegistrations');
+const BusinessNaturesOfBusinessService = require('../../Services/BusinessNaturesOfBusiness');
 const userService = require('../../Services/User');
 const ServiceCategoryService = require('../../Services/ServiceCategories');
 const SubmissionStatusService = require('../../Services/SubmissionStatuses');
@@ -53,7 +54,7 @@ exports.index = catchAsync(async (req, res, next) => {
 exports.store = catchAsync(async (req, res, next) => {
 
   const user = await userService.getUser({
-    email: req.body.email,
+    email: req.body.user.email,
   });
 
   const category = await ServiceCategoryService.getServiceCategory({
@@ -66,7 +67,7 @@ exports.store = catchAsync(async (req, res, next) => {
 
   const adminStatus = await AdminStatusService.getAdminStatus({
     code: 'unattended'
-  });
+  }); 
 
   // req.body.signature = await uploadImage(req.body.signatureImage);
 
@@ -74,6 +75,7 @@ exports.store = catchAsync(async (req, res, next) => {
   await AdminService.updateAssignment(assignedTo._id);
 
   req.body.user = user._id;
+  req.body.email = !req.body.email ? user.email : req.body.email
   req.body.status = status._id;
   req.body.category = category._id;
   req.body.adminStatus = adminStatus._id;
@@ -81,7 +83,7 @@ exports.store = catchAsync(async (req, res, next) => {
   req.body.designation = 'cac';
   req.body.responseFiles = []
 
-
+ 
   var date = new Date();
   req.body.submitted = Date.now(); 
   req.body.expires = date.setDate(date.getDate() + 60);
@@ -338,6 +340,17 @@ exports.saveImage = catchAsync(async (req, res, next) => {
     },
   });
 })
+
+exports.getNaturesOfBusiness = catchAsync(async (req, res, next) => {
+  const result = await BusinessNaturesOfBusinessService.getAllBusinessNaturesOfBusiness(req);
+
+  return res.status(200).json({
+    status: 'success',
+    data: {
+      result
+    },
+  });
+});
 
 
 

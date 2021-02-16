@@ -3,104 +3,348 @@ const Schema = require('mongoose').Schema;
 const validator = require('validator');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
-
-
-const BusinessRegistrationSchema = new Schema({
-    corporateName: {
+const authorizedSignatorySchema = new Schema({
+    dob: {
         type: String,
-        // required: [true, 'Please provide corporate name!'],
+        required: [true, 'Please provide signatory dob'],
     },
-    companyNo: {
+    email: {
         type: String,
-        // required: [true, 'Please provide company number!'],
+        required: [true, 'Please provide signatory email'],
+        lowercase: true,
+        validate: [validator.isEmail, 'Please provide a valid email'],
     },
-    businessName1: {
+    firstName: {
         type: String,
-        // required: [true, 'Please provide business name!'],
+        required: [true, 'Please provide signatory first name'],
     },
-    businessName2: {
+    surname: {
         type: String,
-        // required: [true, 'Please provide second business name!'],
+        required: [true, 'Please provide signatory last name'],
     },
-    type: {
+    otherName: { type: String },
+    nationality: {
         type: String,
-        required: [true, 'Please provide registration type!'],
+        required: [true, 'Please provide signatory nationality'],
+    },
+    passport: {
+        type: String,
+        required: [true, 'Please provide signatory passport'],
     },
     phone: {
         type: String,
-        required: [true, 'Please provide your phone Number'],
+        required: [true, 'Please provide signatory phone'],
     },
-    availabilityCode: {
+    sex: {
         type: String,
-        // required: [true, 'Please provide availability code'],
-    },
-    fullName: {
-        type: String,
-        required: [true, 'Please provide name'],
-    },
-    companyDesignation: {
-        type: String,
-        // required: [true, 'Please provide designation'],
+        required: [true, 'Please provide signatory sex'],
     },
     signature: {
         type: String,
-        required: [true, 'Please provide signature'],
+        required: [true, 'Please provide signatory signature'],
+    }
+})
+
+const placeOfBusinessSchema = new Schema({
+    branchAddress: {
+        type: String,
+        required: [true, 'Please provide place of business address'],
+    },
+    city: {
+        type: String,
+        required: [true, 'Please provide place of business city'],
+    },
+    houseNumber: {
+        type: String,
+        required: [true, 'Please provide place of business number'],
+    },
+    lga: {
+        type: String,
+        required: [true, 'Please provide place of business LGA'],
+    },
+    postalCode: { type: String },
+    state: {
+        type: String,
+        required: [true, 'Please provide place of business state'],
+    },
+    streetName: {
+        type: String,
+        required: [true, 'Please provide place of business sttreet'],
+    }
+})
+
+const addressSchema = new Schema({
+    country: {
+        type: String,
+        required: [true, 'Please provide residential address country'],
+    },
+    city: {
+        type: String,
+        required: [true, 'Please provide residential address city'],
+    },
+    houseNumber: {
+        type: String,
+        required: [true, 'Please provide residential address number'],
+    },
+    lga: {
+        type: String,
+        required: [true, 'Please provide residential address LGA'],
+    },
+    postalCode: { type: String },
+    state: {
+        type: String,
+        required: [true, 'Please provide residential address state'],
+    },
+    streetName: {
+        type: String,
+        required: [true, 'Please provide residential address sttreet'],
+    }
+})
+
+const attesteeSchema = new Schema({
+    residentialAddress: addressSchema,
+    dob: {
+        type: String,
+        required: [true, 'Please provide attestee dob'],
+    },
+    document: {
+        type: String,
+        required: [true, 'Please provide atteste document'],
+    },
+    documentId: {
+        type: String,
+        required: [true, 'Please provide attestee document id'],
+    },
+    documentType: {
+        type: String,
+        required: [true, 'Please provide attestee document type'],
+    },
+    email: {
+        type: String,
+        required: [true, 'Please provide attestee email'],
+        lowercase: true,
+        validate: [validator.isEmail, 'Please provide a valid email'],
+    },
+    firstName: {
+        type: String,
+        required: [true, 'Please provide attestee first name'],
+    },
+    surname: {
+        type: String,
+        required: [true, 'Please provide attestee last name'],
+    },
+    formerName: { type: String },
+    otherName: { type: String },
+    formerNationality: { type: String },
+    nationality: {
+        type: String,
+        required: [true, 'Please provide attestee nationality'],
+    },
+    passport: {
+        type: String,
+        required: [true, 'Please provide attestee passport'],
+    },
+    phone: {
+        type: String,
+        required: [true, 'Please provide attestee phone'],
+    },
+    sex: {
+        type: String,
+        required: [true, 'Please provide attestee sex'],
+    },
+    signature: {
+        type: String,
+        required: [true, 'Please provide attestee signature'],
+    },
+})
+
+const corporatePartnerSchema = new Schema({
+    index: { type: String },
+    companyName: {
+        type: String,
+        required: [true, 'Please provide corporate partner company name'],
+    },
+    regNumber: {
+        type: String,
+        required: [true, 'Please provide corporate partner reg number'],
+    },
+    residentialAddress: addressSchema,
+    serviceAddress: addressSchema,
+    authorizedSignatory: authorizedSignatorySchema
+})
+
+const individualPartnerSchema = new Schema({
+    index: { type: String },
+    residentialAddress: addressSchema,
+    serviceAddress: addressSchema,
+    dob: {
+        type: String,
+        required: [true, 'Please provide corporate partner dob'],
+    },
+    document: {
+        type: String,
+        required: [true, 'Please provide corporate partner document'],
+    },
+    documentId: {
+        type: String,
+        required: [true, 'Please provide corporate partner document id'],
+    },
+    documentType: {
+        type: String,
+        required: [true, 'Please provide corporate partner document type'],
+    },
+    email: {
+        type: String,
+        required: [true, 'Please provide corporate partner email'],
+        lowercase: true,
+        validate: [validator.isEmail, 'Please provide a valid email'],
+    },
+    firstName: {
+        type: String,
+        required: [true, 'Please provide corporate partner first name'],
+    },
+    surname: {
+        type: String,
+        required: [true, 'Please provide corporate partner last name'],
+    },
+    formerName: { type: String },
+    otherName: { type: String },
+    formerNationality: { type: String },
+    nationality: {
+        type: String,
+        required: [true, 'Please provide corporate partner nationality'],
+    },
+    occupation: {
+        type: String,
+        required: [true, 'Please provide corporate partner occupation'],
+    },
+    passport: {
+        type: String,
+        required: [true, 'Please provide corporate partner passport'],
+    },
+    phone: {
+        type: String,
+        required: [true, 'Please provide corporate partner phone'],
+    },
+    sex: {
+        type: String,
+        required: [true, 'Please provide corporate partner sex'],
+    },
+    signature: {
+        type: String,
+        required: [true, 'Please provide corporate partner signature'],
+    },
+})
+
+const minorPartnerSchema = new Schema({
+    index: { type: String },
+    residentialAddress: addressSchema,
+    serviceAddress: addressSchema,
+    attestee: attesteeSchema,
+    dob: {
+        type: String,
+        required: [true, 'Please provide minor partner dob'],
+    },
+    document: {
+        type: String,
+        required: [true, 'Please provide minor partner document'],
+    },
+    documentId: {
+        type: String,
+        required: [true, 'Please provide minor partner document id'],
+    },
+    documentType: {
+        type: String,
+        required: [true, 'Please provide minor partner document type'],
+    },
+    email: {
+        type: String,
+        required: [true, 'Please provide minor partner email'],
+        lowercase: true,
+        validate: [validator.isEmail, 'Please provide a valid email'],
+    },
+    firstName: {
+        type: String,
+        required: [true, 'Please provide minor partner first name'],
+    },
+    surname: {
+        type: String,
+        required: [true, 'Please provide minor partner last name'],
+    },
+    formerName: { type: String },
+    otherName: { type: String },
+    formerNationality: { type: String },
+    nationality: {
+        type: String,
+        required: [true, 'Please provide minor partner nationality'],
+    },
+    passport: {
+        type: String,
+        required: [true, 'Please provide minor partner passport'],
+    },
+    phone: {
+        type: String,
+        required: [true, 'Please provide minor partner phone'],
+    },
+    sex: {
+        type: String,
+        required: [true, 'Please provide minor partner sex'],
+    },
+    signature: {
+        type: String,
+        required: [true, 'Please provide minor partner signature'],
+    },
+})
+
+
+
+const BusinessRegistrationSchema = new Schema({
+    availabilityCode: { type: String },
+    businessDescription: {
+        type: String,
+        required: [true, 'Please provide business desccription'],
+    },
+    businessName1: {
+        type: String,
+        required: [true, 'Please provide business name'],
+    },
+    businessName2: { type: String },
+    commencementDate: {
+        type: String,
+        required: [true, 'Please provide business commencement date'],
     },
     charge: {
         type: String,
         required: [true, 'Please provide service charge'],
     },
-    principalAddress: {
+    corporatePartners: [corporatePartnerSchema],
+    individualPartners: [individualPartnerSchema],
+    minorPartners: [minorPartnerSchema],
+    natureOfBusiness: {
         type: String,
-        // required: [true, 'Please provide principal address'],
+        required: [true, 'Please provide nature of business'],
     },
-    branchAddress: {
+    specificNature: {
         type: String,
-        // required: [true, 'Please provide branch address'],
+        required: [true, 'Please provide specific nature of business'],
     },
-    businessCategory: {
+    placeOfBusiness: placeOfBusinessSchema,
+    proprietor: individualPartnerSchema,
+    type: {
         type: String,
-        // required: [true, 'Please provide business type'],
+        required: [true, 'Please provide registration type!'],
     },
-    surname: {
+    hideAttestee: { type: Boolean },
+    hideAuthorizedSignatory: { type: Boolean },
+    hideIndividual: { type: Boolean },
+    hideMinor: { type: Boolean },
+    document: {
         type: String,
-        // required: [true, 'Please tell us your surname!'],
-    },
-    age: {
-        type: Number,
-        // required: [true, 'Please provide age!'],
-    },
-    sex: {
-        type: String,
-        // required: [true, 'Please tell us your sex!'],
-    },
-    address: {
-        type: String,
-        // required: [true, 'Please provide address'],
-    },
-    occupation: {
-        type: String,
-        // required: [true, 'Please provide occupation'],
-    },
-    nationality: {
-        type: String,
-        // required: [true, 'Please provide nationality'],
-    },
-    state: {
-        type: String,
-        // required: [true, 'Please provide state'],
-    },
-    city: {
-        type: String,
-        // required: [true, 'Please provide city'],
-    },
-    passport: {
-        type: String,
-        // required: [true, 'Please provide passport'],
+        required: [true, 'Please provide business document'],
     },
     email: {
         type: String,
-        required: [true, 'Please provide user email'],
+        required: [true, 'Please provide business email'],
         lowercase: true,
         validate: [validator.isEmail, 'Please provide a valid email'],
     },
@@ -147,6 +391,7 @@ const BusinessRegistrationSchema = new Schema({
         type: Date,
         default: Date.now,
     }
+
 }, { collection: 'business_registrations' });
 
 BusinessRegistrationSchema.index({

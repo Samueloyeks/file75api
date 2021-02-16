@@ -6,12 +6,18 @@ const userService = require('../../Services/User');
 const User = require('../../Models/User');
 
 
+exports.index = (req, res, next) => {
+  return res.json({
+    message: "Welcome to file",
+  });
+}
+
 
 exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
 };
- 
+
 exports.getUser = (req, res, next) =>
   userService.getUserDefault(req, res, next);
 
@@ -207,7 +213,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   return userService.createSendToken(user, 200, res);
 });
 
-exports.updateUser = catchAsync(async(req,res,next)=>{
+exports.updateUser = catchAsync(async (req, res, next) => {
 
   await User.update({ _id: req.params.id },
     {

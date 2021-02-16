@@ -13,19 +13,30 @@ const AdminService = require('./Admin');
 
 exports.createBusinessregistration = async (req) => {
     return await BusinessRegistration.create({
-        corporateName:req.corporateName,
-        companyNo:req.companyNo,
+        availabilityCode: req.availabilityCode,
+        businessDescription: req.businessDescription,
         businessName1: req.businessName1,
         businessName2: req.businessName2,
-        phone: req.phone,
-        availabilityCode:req.availabilityCode,
-        fullName:req.fullName,
-        companyDesignation:req.companyDesignation,
-        signature:req.signature,
+        commencementDate: req.commencementDate,
         charge: req.charge,
+        corporatePartners: req.corporatePartners,
+        document: req.document,
         email: req.email,
+        individualPartners: req.individualPartners,
+        minorPartners: req.minorPartners,
+        natureOfBusiness: req.natureOfBusiness,
+        placeOfBusiness: req.placeOfBusiness,
+        proprietor: req.proprietor,
+        specificNature: req.specificNature,
+        type: req.type,
+        // partnership specific 
+        hideAttestee: req.hideAttestee,
+        hideAuthorizedSignatory: req.hideAuthorizedSignatory,
+        hideIndividual: req.hideIndividual,
+        hideMinor: req.hideMinor,
+        // generated 
         user: req.user,
-        status: req.status,
+        status: req.status, 
         category: req.category,
         assignedTo: req.assignedTo,
         adminStatus: req.adminStatus,
@@ -33,21 +44,7 @@ exports.createBusinessregistration = async (req) => {
         expires: req.expires,
         viewed: req.viewed,
         designation: req.designation,
-        responseFiles:req.responseFiles,
-
-        type:req.type,
-        principalAddress: req.principalAddress,
-        branchAddress: req.branchAddress,
-        businessCategory: req.businessCategory,
-        surname: req.surname,
-        age: req.age,
-        sex: req.sex,
-        address: req.address,
-        occupation: req.occupation,
-        nationality: req.nationality,
-        state: req.state,
-        city: req.city,
-        passport: req.passport,
+        responseFiles: req.responseFiles
     });
 };
 
@@ -60,7 +57,7 @@ exports.getBusinessRegistration = async (params) => {
     return await query;
 };
 
-exports.getAllBusinessRegistrations= async (req) => {
+exports.getAllBusinessRegistrations = async (req) => {
     const {
         associations = [],
         page = 1,
@@ -69,7 +66,7 @@ exports.getAllBusinessRegistrations= async (req) => {
         byUserId = null,
         byAdminId = null,
         byStatusCode = null,
-        byAdminStatusCode=null,
+        byAdminStatusCode = null,
         byCategorycode = null
     } = req.query;
 
@@ -116,7 +113,7 @@ exports.getAllBusinessRegistrations= async (req) => {
     }
 
     if (search) query = query.find({ $text: { $search: search } });
-    
+
     return await query.skip(skip).sort([['_id', -1]]).limit(pageLimit);
 };
 

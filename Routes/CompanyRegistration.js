@@ -3,6 +3,7 @@ const CompanyRegistrationController = require('../Controllers/CompanyRegistratio
 const authGuard = require('../Guards/Auth');
 const adminGuard = require('../Guards/Admin');
 const multer = require('multer');
+const UploadsController = require('../Controllers/Uploads/LoadController');
 
 
 const uploader = multer({

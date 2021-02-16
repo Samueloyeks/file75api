@@ -17,6 +17,9 @@ const BusinessRegistrationRouter = require('./Routes/BusinessRegistration');
 const CompanyRegistrationRouter = require('./Routes/CompanyRegistration');
 const ServiceCategoryRouter = require('./Routes/ServiceCategories');
 const BusinessObjectRouter = require('./Routes/BusinessObjects');
+const CompanyNatureOfBusinessRouter = require('./Routes/CompanyNaturesOfBusiness');
+const BusinessNatureOfBusinessRouter = require('./Routes/BusinessNaturesOfBusiness');
+const ArticlesOfAssociationRouter = require('./Routes/ArticlesOfAssociation');
 const UploadsRouter = require('./Routes/Uploads');
 const path = require("path")
 const bodyParser = require('body-parser');
@@ -30,7 +33,7 @@ const app = express();
 app.enable('trust proxy');
 
 app.use(
-  cors() 
+  cors()
 );
 app.use(fileUpload());
 
@@ -62,7 +65,7 @@ app.use(mongoSanitize());
 app.use(xss());
 
 // Prevent parameter pollution
-app.use( 
+app.use(
   hpp({
     whitelist: ['reference'],
   })
@@ -85,9 +88,12 @@ app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/reservation', ReservationRouter);
 app.use('/api/v1/businessReg', BusinessRegistrationRouter);
 app.use('/api/v1/companyReg', CompanyRegistrationRouter);
-app.use('/api/v1/services', ServiceCategoryRouter); 
-app.use('/api/v1/uploads', UploadsRouter); 
-app.use('/api/v1/businessObjects', BusinessObjectRouter); 
+app.use('/api/v1/services', ServiceCategoryRouter);
+app.use('/api/v1/uploads', UploadsRouter);
+app.use('/api/v1/businessObjects', BusinessObjectRouter);
+app.use('/api/v1/companyNaturesOfBusiness', CompanyNatureOfBusinessRouter);
+app.use('/api/v1/businessNaturesOfBusiness', BusinessNatureOfBusinessRouter);
+app.use('/api/v1/article', ArticlesOfAssociationRouter);
 
 
 
@@ -98,4 +104,3 @@ app.all('*', (req, res, next) => {
 app.use(globalErrorHandler);
 
 module.exports = app;
- 

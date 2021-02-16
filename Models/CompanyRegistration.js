@@ -256,6 +256,15 @@ const SecretarySchema = new Schema({
     }
 });
 
+const ObjectsOfMemorandumSchema = new Schema({
+    businessCategory: {
+        type: String,
+    },
+    businessObject: {
+        type: Array,
+    },
+})
+
 const CompanyRegistrationSchema = new Schema({
     companyName1: {
         type: String,
@@ -282,116 +291,40 @@ const CompanyRegistrationSchema = new Schema({
         type: String,
         required: [true, 'Please provide service charge'],
     },
-    officeAddress: {
-        type: String,
-        required: [true, 'Please provide office address'],
-    },
-    headOfficeAddress: {
-        type: String,
-        required: [true, 'Please provide head office address'],
-    },
-    businessCategory: {
-        type: String,
-        required: [true, 'Please provide business type'],
-    },
-    address: {
-        type: String,
-        // required: [true, 'Please provide address'],
-    },
+    objectsOfMemorandum: ObjectsOfMemorandumSchema,
     email: {
         type: String,
         required: [true, 'Please provide user email'],
         lowercase: true,
         validate: [validator.isEmail, 'Please provide a valid email'],
     },
-    companyEmail: {
-        type: String,
-        required: [true, 'Please provide company email'],
-        lowercase: true,
-        validate: [validator.isEmail, 'Please provide a valid email'],
+    directors: {
+        type: Object,
+        required: [true, 'Please provide directors'],
     },
-    directors: [DirectorSchema],
-    shareCapitalUnits: {
-        type: String,
+    minorShareholders: {
+        type: Object,
     },
-    pricePerShare: {
-        type: String,
+    corporateShareholders: {
+        type: Object,
     },
-    valueOfShares: {
-        type: String,
+    individualShareholders: {
+        type: Object,
     },
-    shareholders: [ShareholderSchema],
-    guarantors: [GuarantorSchema],
+    PSCs: {
+        type: Object,
+    },
     secretary: {
-        address: {
-            type: String,
-            required: [true, 'Please provide secretary address'],
-        },
-        dob: {
-            type: String,
-        },
-        document: {
-            type: String,
-            required: [true, 'Please provide secreatary document'],
-        },
-        documentId: {
-            type: String,
-            required: [true, 'Please provide secreatary document id'],
-        },
-        documentType: {
-            type: String,
-            required: [true, 'Please provide secreatary document type'],
-        },
-        email: {
-            type: String,
-            required: [true, 'Please provide secretary email'],
-            lowercase: true,
-            validate: [validator.isEmail, 'Please provide a valid email'],
-        },
-        fullName: {
-            type: String,
-            required: [true, 'Please provide secretary full name']
-        },
-        numberType: {
-            type: String
-        },
-        phone: {
-            type: String,
-            required: [true, 'Please provide secretary phone number']
-        },
-        regNumber: {
-            type: String
-        },
-        secretaryType: {
-            type: String
-        },
-        signature: {
-            type: String,
-            required: [true, 'Please provide secreatary signature'],
-        }
-    },
-    totalGuarantee: {
-        type: Number
+        type: Object,
+        required: [true, 'Please provide secretary'],
     },
     companyType: {
         type: String,
         // required: [true, 'Please provide company type'],
     },
-    witnessName: {
-        type: String,
-        required: [true, 'Please provide witness name'],
-    },
-    witnessAddress: {
-        type: String,
-        required: [true, 'Please provide witness address'],
-    },
-    witnessOccupation: {
-        type: String,
-        required: [true, 'Please provide witness occupation'],
-    },
-    witnessSignature: {
-        type: String,
-        required: [true, 'Please provide witness signature'],
+    adoptCACArticle:{
+        type: Boolean,
+        required: [true, 'Please specify article option'],
     },
     user: {
         // type: String,
@@ -436,7 +369,7 @@ const CompanyRegistrationSchema = new Schema({
         type: Date,
         default: Date.now,
     }
-}, { collection: 'company_registrations' });
+}, { collection: 'company_registrations', strict: false });
 
 CompanyRegistrationSchema.index({
     'companyName1': 'text',

@@ -79,8 +79,6 @@ const uploadToStorage = (file, filename) => {
       });
     });
 
-
-
     blobStream.end(file.data);
 
   });
@@ -93,21 +91,21 @@ const uploadImage = async (imageData) => {
     let fileUpload = bucket.file(newFileName);
 
     var bufferStream = new stream.PassThrough();
-    bufferStream.end(Buffer.from(imageData.data,'base64'));
+    bufferStream.end(Buffer.from(imageData.data, 'base64'));
 
     bufferStream.pipe(fileUpload.createWriteStream({
       contentType: 'application/octet-stream',
       metadata: {
-        custom: 'metadata', 
+        custom: 'metadata',
       },
       public: true,
       validation: "md5"
     }))
-      .on('error', function (err) { console.log(err);})
+      .on('error', function (err) { console.log(err); })
       .on('finish', function () {
         // The file upload is complete.
-        const publicUrl = 
-        // `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURI(fileUpload.name)}`;
+        const publicUrl =
+          // `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURI(fileUpload.name)}`;
           `https://storage.googleapis.com/${bucket.name}/${encodeURI(fileUpload.name)}`
         resolve(publicUrl)
 
@@ -126,5 +124,5 @@ const uploadImage = async (imageData) => {
 module.exports = {
   upload,
   uploadToStorage,
-  uploadImage
+  uploadImage,
 };

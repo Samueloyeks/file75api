@@ -49,7 +49,7 @@ exports.index = catchAsync(async (req, res, next) => {
 // POST reservations 
 exports.store = catchAsync(async (req, res, next) => {
   const user = await userService.getUser({
-    email: req.body.email,
+    email: req.body.user.email,
   });
 
   const category = await ServiceCategoryService.getServiceCategory({
@@ -69,6 +69,7 @@ exports.store = catchAsync(async (req, res, next) => {
   await AdminService.updateAssignment(assignedTo._id);
 
   req.body.user = user._id;
+  req.body.email = !req.body.email ? user.email : req.body.email
   req.body.status = status._id;
   req.body.category = category._id;
   req.body.adminStatus = adminStatus._id;
@@ -135,7 +136,7 @@ exports.deploy = catchAsync(async (req, res, next) => {
   const updatedReservation = await Reservation.update({ _id: req.body._id },
     { $set: { "adminStatus": adminStatus._id } }, { multi: true })
 
-  const reservation = await Reservation.find({_id:req.body._id});
+  const reservation = await Reservation.find({ _id: req.body._id });
 
   let title = 'Reservation Deployed';
   let comment = await Comments.find({ title: title });
@@ -208,7 +209,7 @@ exports.finish = catchAsync(async (req, res, next) => {
 
     let title = 'Reservation Completed';
     let comment = await Comments.find({ title: title });
-  
+
     await ReservationLog.create({
       reservation: reservation[0]._id,
       comment: comment[0]._id,
@@ -289,7 +290,7 @@ exports.reject = catchAsync(async (req, res, next) => {
 
     let title = 'Reservation Rejected';
     let comment = await Comments.find({ title: title });
-  
+
     await ReservationLog.create({
       reservation: reservation[0]._id,
       comment: comment[0]._id,

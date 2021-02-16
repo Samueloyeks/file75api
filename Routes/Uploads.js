@@ -6,8 +6,8 @@ const adminGuard = require('../Guards/Admin');
 
 const router = express.Router();
 
-router.post('/nameReservation',UploadsController.uploadFile, authGuard.protect);
-router.get('/',UploadsController.downloadFile, authGuard.protect);
+router.post('/nameReservation', UploadsController.uploadFile, authGuard.protect);
+router.get('/', UploadsController.downloadFile, authGuard.protect);
 
 // router.get('/', ReservationController.index, authGuard.protect);
 

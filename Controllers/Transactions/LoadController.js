@@ -23,7 +23,7 @@ exports.store = catchAsync(async (req, res, next) => {
     //     data: {
     //         newTransaction
     //     },
-    // });
+    // }); 
 });
 
 // get a single transaction 

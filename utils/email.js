@@ -67,7 +67,7 @@ module.exports = class Email {
       attachments: [
         {
           filename: 'logo.png',
-          path: `${__dirname}/../public/images/logo.png`,
+          path: `${__dirname}/../Public/images/logo.png`,
           cid: 'logo',
         },
         ...fileAttachments

@@ -2,6 +2,7 @@ const catchAsync = require('../../utils/catchAsync');
 const AppError = require('../../utils/appError');
 const CompanyRegistrationService = require('../../Services/CompanyRegistrations');
 const BusinessObjectsService = require('../../Services/BusinessObjects');
+const CompanyNaturesOfBusinessService = require('../../Services/CompanyNaturesOfBusiness');
 const IndividualRegistrationService = require('../../Services/IndividualRegistrations');
 const userService = require('../../Services/User');
 const ServiceCategoryService = require('../../Services/ServiceCategories');
@@ -59,7 +60,7 @@ exports.index = catchAsync(async (req, res, next) => {
 exports.store = catchAsync(async (req, res, next) => {
 
   const user = await userService.getUser({
-    email: req.body.email,
+    email: req.body.user.email,
   });
 
   const category = await ServiceCategoryService.getServiceCategory({
@@ -80,6 +81,7 @@ exports.store = catchAsync(async (req, res, next) => {
   await AdminService.updateAssignment(assignedTo._id);
 
   req.body.user = user._id;
+  req.body.email = !req.body.email ? user.email : req.body.email
   req.body.status = status._id;
   req.body.category = category._id;
   req.body.adminStatus = adminStatus._id;
@@ -98,20 +100,22 @@ exports.store = catchAsync(async (req, res, next) => {
   TransactionData.user = user._id;
   TransactionData.service = newCompanyRegistration._id;
 
-  const pdfhandler = new PdfHandler(req.body);
-  const attachmentPaths = []
 
-  if (req.body.type === 'limitedByGuarantee') {
+  // CREATE AND SEND PDF
+  // const pdfhandler = new PdfHandler(req.body);
+  // const attachmentPaths = []
 
-  } else {
-    const moa_pdf_name = await pdfhandler.generateMOA();
-    attachmentPaths.push(moa_pdf_name)
-  }
+  // if (req.body.type === 'limitedByGuarantee') {
+
+  // } else {
+  //   const moa_pdf_name = await pdfhandler.generateMOA();
+  //   attachmentPaths.push(moa_pdf_name)
+  // }
 
 
-  const email = new Email(user, null, [], attachmentPaths)
-
-  email.send('documentsGenerated', 'Company Registration Received')
+  // const email = new Email(user, null, [], attachmentPaths)
+ 
+  // email.send('documentsGenerated', 'Company Registration Received')
 
   // for (var path of attachmentPaths) {
   //   fs.unlinkSync(`files/${path}`)
@@ -366,6 +370,17 @@ exports.saveImage = catchAsync(async (req, res, next) => {
 
 exports.getBusinessObjects = catchAsync(async (req, res, next) => {
   const result = await BusinessObjectsService.getAllBusinessObjects(req);
+
+  return res.status(200).json({
+    status: 'success',
+    data: {
+      result
+    },
+  });
+});
+
+exports.getNaturesOfBusiness = catchAsync(async (req, res, next) => {
+  const result = await CompanyNaturesOfBusinessService.getAllCompanyNaturesOfBusiness(req);
 
   return res.status(200).json({
     status: 'success',

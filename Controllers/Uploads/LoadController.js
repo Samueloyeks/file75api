@@ -30,6 +30,26 @@ exports.uploadFile = async (req, res,next) => {
         return res.send({ name: myFile.name, path: `Files/${fileName}` });
     });
 };
+ 
+exports.downloadFile = async (req, res) => {
+    const { filePath } = req.query;
+    var fullPath = `${__dirname}/../../${filePath}`
+    console.log('FULL PATH:')
+    console.log(path.join(fullPath))
+
+    var stat = fs.statSync(path.join(fullPath));
+
+    res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Content-Length': stat.size
+    });
+
+    var readStream = fs.createReadStream(path.join(fullPath));
+    readStream.on('close', () => {
+        readStream.pipe(res);
+    })
+
+};
 
 exports.downloadFile = async (req, res) => {
     const { filePath } = req.query;
