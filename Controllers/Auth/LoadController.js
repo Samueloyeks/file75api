@@ -32,7 +32,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   if (user) {
     return next(new AppError('Email has been registered', 409));
-  }
+  } 
 
   const newUser = await userService.createUser(req.body);
 

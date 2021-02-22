@@ -19,7 +19,7 @@ exports.createUser = async (req) => {
     role: req.role,
     slug: req.slug,
     password: req.password,
-    passport: req.passport,
+    passport: req.passport, 
     signature: req.signature,
     adminId: req.adminId
   });

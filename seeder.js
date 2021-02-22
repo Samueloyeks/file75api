@@ -8,9 +8,8 @@ const comments = require('./Database/Seeders/CommentSeeder')
 const businessObjects = require('./Database/Seeders/BusinessObjectSeeder')
 const companyNaturesOfBusiness = require('./Database/Seeders/CompanyNatureOfBusiness')
 const businessNaturesOfBusiness = require('./Database/Seeders/BusinessNatureOfBusiness')
-
-
-
+const users = require('./Database/Seeders/UserSeeder')
+const admins = require('./Database/Seeders/AdminSeeder')
 
 
 dotenv.config({ path: './config.env' });
@@ -20,6 +19,7 @@ let DB = process.env.DATABASE.replace(
     process.env.DATABASE_PASSWORD
 );
 DB = DB.replace('<dbname>', process.env.DATABASE_NAME);
+
 
 seeder.connect(DB, () => {
     seeder.loadModels([
@@ -31,6 +31,8 @@ seeder.connect(DB, () => {
         './Models/BusinessObjects',
         './Models/CompanyNaturesOfBusiness',
         './Models/BusinessNaturesOfBusiness',
+        './Models/User',
+        './Models/Admin',
     ])
 
     seeder.clearModels([
@@ -41,7 +43,9 @@ seeder.connect(DB, () => {
         'Comments',
         'BusinessObjects',
         'CompanyNaturesOfBusiness',
-        'BusinessNaturesOfBusiness'
+        'BusinessNaturesOfBusiness',
+        'User',
+        'Admin'
     ], () => {
 
         seeder.populateModels(data, (err, done) => {
@@ -56,6 +60,7 @@ seeder.connect(DB, () => {
             seeder.disconnect();
         })
     })
+
 })
 
 const data = [
@@ -90,6 +95,14 @@ const data = [
     {
         'model': 'BusinessNaturesOfBusiness',
         'documents': businessNaturesOfBusiness
+    },
+    {
+        'model': 'User',
+        'documents': users
+    },
+    {
+        'model': 'Admin',
+        'documents': admins
     },
 ]
 

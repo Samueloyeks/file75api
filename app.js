@@ -20,6 +20,7 @@ const BusinessObjectRouter = require('./Routes/BusinessObjects');
 const CompanyNatureOfBusinessRouter = require('./Routes/CompanyNaturesOfBusiness');
 const BusinessNatureOfBusinessRouter = require('./Routes/BusinessNaturesOfBusiness');
 const ArticlesOfAssociationRouter = require('./Routes/ArticlesOfAssociation');
+const FeedbackEmailRouter = require('./Routes/FeedbackEmails');
 const UploadsRouter = require('./Routes/Uploads');
 const path = require("path")
 const bodyParser = require('body-parser');
@@ -94,6 +95,7 @@ app.use('/api/v1/businessObjects', BusinessObjectRouter);
 app.use('/api/v1/companyNaturesOfBusiness', CompanyNatureOfBusinessRouter);
 app.use('/api/v1/businessNaturesOfBusiness', BusinessNatureOfBusinessRouter);
 app.use('/api/v1/article', ArticlesOfAssociationRouter);
+app.use('/api/v1/feedback', FeedbackEmailRouter);
 
 
 

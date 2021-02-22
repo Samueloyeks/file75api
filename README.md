@@ -3,7 +3,6 @@ The Node(express) API for file.ng
 2. run "npm install"
 3. run "npm run seed"
 4. run "nodemon server.js"
-5. 😉server is now running.
+5. 😉 server is now running.
 
 
-s
