@@ -20,6 +20,8 @@ let DB = process.env.DATABASE.replace(
 );
 DB = DB.replace('<dbname>', process.env.DATABASE_NAME);
 
+// let DB = process.env.DATABASE_LOCAL;
+
 
 seeder.connect(DB, () => {
     seeder.loadModels([
