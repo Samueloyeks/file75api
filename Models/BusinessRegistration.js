@@ -100,6 +100,28 @@ const addressSchema = new Schema({
     }
 })
 
+const addressSchema2 = new Schema({
+    country: {
+        type: String,
+    },
+    city: {
+        type: String,
+    },
+    houseNumber: {
+        type: String,
+    },
+    lga: {
+        type: String,
+    },
+    postalCode: { type: String },
+    state: {
+        type: String,
+    },
+    streetName: {
+        type: String,
+    }
+})
+
 const attesteeSchema = new Schema({
     residentialAddress: addressSchema,
     dob: {
@@ -168,14 +190,14 @@ const corporatePartnerSchema = new Schema({
         required: [true, 'Please provide corporate partner reg number'],
     },
     residentialAddress: addressSchema,
-    serviceAddress: addressSchema,
+    serviceAddress: addressSchema2,
     authorizedSignatory: authorizedSignatorySchema
 })
 
 const individualPartnerSchema = new Schema({
     index: { type: String },
     residentialAddress: addressSchema,
-    serviceAddress: addressSchema,
+    serviceAddress: addressSchema2,
     dob: {
         type: String,
         required: [true, 'Please provide corporate partner dob'],
@@ -238,7 +260,7 @@ const individualPartnerSchema = new Schema({
 const minorPartnerSchema = new Schema({
     index: { type: String },
     residentialAddress: addressSchema,
-    serviceAddress: addressSchema,
+    serviceAddress: addressSchema2,
     attestee: attesteeSchema,
     dob: {
         type: String,
