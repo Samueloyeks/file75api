@@ -48,7 +48,6 @@ const authorizedSignatorySchema = new Schema({
 const placeOfBusinessSchema = new Schema({
     branchAddress: {
         type: String,
-        required: [true, 'Please provide place of business address'],
     },
     city: {
         type: String,
@@ -339,8 +338,7 @@ const BusinessRegistrationSchema = new Schema({
     hideIndividual: { type: Boolean },
     hideMinor: { type: Boolean },
     document: {
-        type: String,
-        required: [true, 'Please provide business document'],
+        type: String
     },
     email: {
         type: String,
