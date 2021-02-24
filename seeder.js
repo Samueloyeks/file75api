@@ -5,6 +5,7 @@ const adminStatuses = require('./Database/Seeders/AdminStatusSeeder')
 const serviceCategories = require('./Database/Seeders/ServiceCategorySeeder')
 const designations = require('./Database/Seeders/DesignationSeeder')
 const comments = require('./Database/Seeders/CommentSeeder')
+const faq = require('./Database/Seeders/FaqSeeder')
 const businessObjects = require('./Database/Seeders/BusinessObjectSeeder')
 const companyNaturesOfBusiness = require('./Database/Seeders/CompanyNatureOfBusiness')
 const businessNaturesOfBusiness = require('./Database/Seeders/BusinessNatureOfBusiness')
@@ -35,6 +36,7 @@ seeder.connect(DB, () => {
         './Models/BusinessNaturesOfBusiness',
         './Models/User',
         './Models/Admin',
+        './Models/Faq'
     ])
 
     seeder.clearModels([
@@ -47,7 +49,8 @@ seeder.connect(DB, () => {
         'CompanyNaturesOfBusiness',
         'BusinessNaturesOfBusiness',
         'User',
-        'Admin'
+        'Admin',
+        'Faq'
     ], () => {
 
         seeder.populateModels(data, (err, done) => {
@@ -106,6 +109,10 @@ const data = [
         'model': 'Admin',
         'documents': admins
     },
+    {
+        'model': 'Faq',
+        'documents': faq
+    }
 ]
 
 
