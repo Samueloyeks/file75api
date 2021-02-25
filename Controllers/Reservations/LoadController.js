@@ -1,6 +1,6 @@
 const catchAsync = require('../../utils/catchAsync');
 const AppError = require('../../utils/appError');
-const reservationService = require('../../Services/Reservations');
+const ReservationService = require('../../Services/Reservations');
 const userService = require('../../Services/User');
 const ServiceCategoryService = require('../../Services/ServiceCategories');
 const SubmissionStatusService = require('../../Services/SubmissionStatuses');
@@ -30,12 +30,12 @@ const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET_URL);
 
 
 exports.getReservation = (req, res, next) =>
-  reservationService.getReservationDefault(req, res, next);
+  ReservationService.getReservationDefault(req, res, next);
 
 // show all reservations 
 // GET reservations
 exports.index = catchAsync(async (req, res, next) => {
-  var result = await reservationService.getAllReservations(req);
+  var result = await ReservationService.getAllReservations(req);
 
   return res.status(200).json({
     status: 'success',
@@ -85,7 +85,7 @@ exports.store = catchAsync(async (req, res, next) => {
   const TransactionData = req.body.transactionData;
 
   req.body.transactionData = null;
-  const newreservation = await reservationService.createReservation(req.body);
+  const newreservation = await ReservationService.createReservation(req.body);
 
   TransactionData.user = user._id;
   TransactionData.service = newreservation._id;
@@ -115,7 +115,7 @@ exports.store = catchAsync(async (req, res, next) => {
 // get a single reservation 
 // GET reservations/:id
 exports.show = catchAsync(async (req, res, next) => {
-  const result = await reservationService.getReservation(req.params);
+  const result = await ReservationService.getReservation(req.params);
 
   return res.status(200).json({
     status: 'success',

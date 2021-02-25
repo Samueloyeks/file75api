@@ -18,11 +18,14 @@ const FeedbackEmailsSchema = new mongoose.Schema({
         type: Schema.ObjectId,
         ref: 'User',
     },
-    category: {
+    fullName:{
         type: String
     },
+    category: {
+        type: Schema.ObjectId,
+    },
     submission: { 
-        type: String
+        type: Schema.ObjectId,
     },
     assignedTo: {
         type: Schema.ObjectId,

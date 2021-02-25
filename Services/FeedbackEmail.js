@@ -15,6 +15,7 @@ exports.createFeedbackEmail = async (req) => {
         phone: req.phone,
         body: req.body,
         submission: req.submission,
+        fullName:req.fullName,
         user: req.user,
         category: req.category,
         assignedTo: req.assignedTo

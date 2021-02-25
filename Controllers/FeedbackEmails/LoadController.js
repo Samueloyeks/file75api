@@ -15,6 +15,9 @@ const bodyParser = require('body-parser');
 const { Storage } = require('@google-cloud/storage');
 const { upload, uploadToStorage } = require('../../Middleware/Upload');
 const User = require('../../Models/User');
+const ReservationService = require('../../Services/Reservations');
+const BusinessRegistrationService = require('../../Services/BusinessRegistrations');
+const CompanyRegistrationService = require('../../Services/CompanyRegistrations');
 
 
 
@@ -39,26 +42,54 @@ exports.index = catchAsync(async (req, res, next) => {
 // save a new reservation 
 // POST feedback emails 
 exports.store = catchAsync(async (req, res, next) => {
-  const user = await userService.getUser({
-    email: req.body.user.email,
-  });
-
   var category = null;
+  var submission = null;
+  var assignedTo = null
+  var user = null
+  const { categoryCode, submissionId } = req.body;
 
-  if (req.body.category) {
-    category = await ServiceCategoryService.getServiceCategory({
-      code: req.body.category
+  if (req.body.user) {
+    user = await userService.getUser({
+      email: req.body.user.email,
     });
   }
 
 
-  const assignedTo = await AdminService.getNextAdmin();
+
+  if (categoryCode) {
+    category = await ServiceCategoryService.getServiceCategory({
+      code: categoryCode
+    });
+
+    if (submissionId) {
+      if (categoryCode === 'name_rsv') {
+        submission = await ReservationService.getReservation({
+          id: submissionId
+        });
+      } else if (categoryCode === 'business_reg') {
+        submission = await BusinessRegistrationService.getBusinessRegistration({
+          id: submissionId
+        });
+      } else if (categoryCode === 'company_reg') {
+        submission = await CompanyRegistrationService.getCompanyRegistration({
+          id: submissionId
+        });
+      }
+    }
+  }
+
+
+  assignedTo = submission ? await AdminService.getOne(submission.assignedTo, false, null) : await AdminService.getNextAdmin();
+
   await AdminService.updateAssignment(assignedTo._id);
 
-  req.body.user = user._id;
-  req.body.email = !req.body.email ? user.email : req.body.email
+  req.body.user = user ? user._id : null;
+  req.body.email = !req.body.email ? (user ? user.email : null) : req.body.email
+  req.body.fullName = !req.body.fullName ? (user ? user.fullName : null) : req.body.fullName
   req.body.category = category ? category._id : null;
   req.body.assignedTo = assignedTo._id;
+  req.body.submission = submission ? submission._id : null;
+
 
   const mewFeedbackEmail = await feedbackEmailService.createFeedbackEmail(req.body);
 
