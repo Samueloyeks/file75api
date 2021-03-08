@@ -11,7 +11,7 @@ exports.index = (req, res, next) => {
     message: "Welcome to file",
   });
 }
-
+ 
 
 exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
