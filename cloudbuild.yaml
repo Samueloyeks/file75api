@@ -1,8 +1,4 @@
 # [START app_yaml]
-env: flex
-runtime : nodejs
-vm : true
-
 steps:
   # Install node.js dependencies
   - name: node
