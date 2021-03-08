@@ -7,7 +7,7 @@
     "seed": "node seeder.js",
     "start": "node server.js",
     "dev": "node server.js",
-    "start:prod": "NODE_ENV=production node server.js",
+    "start:prod": "node server.js",
     "debug": "ndb server.js",
     "update-env": "gsutil -m cp -r api/services/deployment-files gs://file75api-deployment-files"
   },
