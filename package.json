@@ -11,7 +11,7 @@
     "debug": "ndb server.js",
     "update-env": "gsutil -m cp -r api/services/deployment-files gs://file75api-deployment-files"
   },
-  "repository": {
+  "repository": { 
     "type": "git",
     "url": "https://github.com/Mayorwa/Express-boilerplate.git"
   },
