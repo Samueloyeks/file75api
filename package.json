@@ -6,10 +6,10 @@
   "scripts": {
     "seed": "node seeder.js",
     "start": "node server.js",
-    "dev": "nodemon server.js",
-    "start:prod": "NODE_ENV=production nodemon server.js",
+    "dev": "node server.js",
+    "start:prod": "NODE_ENV=production node server.js",
     "debug": "ndb server.js",
-    "update-env": "gsutil -m cp -r tmp/deployment-files gs://file75api-deployment-files"
+    "update-env": "gsutil -m cp -r api/services/deployment-files gs://file75api-deployment-files"
   },
   "repository": {
     "type": "git",
