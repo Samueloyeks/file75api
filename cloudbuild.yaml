@@ -1,0 +1,41 @@
+# [START app_yaml]
+env: flex
+runtime : nodejs
+vm : true
+
+steps:
+  # Install node.js dependencies
+  - name: node
+    entrypoint: npm
+    args: ["install"]
+  # Fetch gcp-service-account.json from storage
+  - name: gcr.io/cloud-builders/gsutil
+    args:
+      [
+        "cp",
+        "gs://file75api-deployment-files/deployment-files/firebaseapk.json",
+        "api/services/firebaseapk.json",
+      ]
+  # Fetch environment variables from storage
+  - name: gcr.io/cloud-builders/gsutil
+    args:
+      [
+        "cp",
+        "gs://file75api-deployment-files/deployment-files/${_ENV}.env",
+        ".env",
+      ]
+  # Fetch app.yaml from storage
+  - name: gcr.io/cloud-builders/gsutil
+    args:
+      [
+        "cp", 
+        "gs://file75api-deployment-files/deployment-files/${_ENV}.yaml",
+        "app.yaml",
+      ]
+  # Run Seeders -- Resource heavy, enable only when neccesary
+  - name: node
+    entrypoint: npm
+    args: ['run', 'seed']
+  # Deploy application
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: ["app", "deploy"]

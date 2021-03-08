@@ -38,5 +38,11 @@ router.put('/reject/:id',
     // adminGuard.isAdmin,
 )
 
+router.put('/markAsViewed/:id',
+    ReservationController.markAsViewed,
+    // authGuard.protect,
+    // adminGuard.isAdmin,
+)
+
 
 module.exports = router;

@@ -5,7 +5,7 @@ const Schema = require('mongoose').Schema;
 const FeedbackEmailsSchema = new mongoose.Schema({
     email: {
         type: String,
-        required: [true, 'Please provide shareholder email']
+        required: [true, 'Please provide email']
     },
     phone: {
         type: String,

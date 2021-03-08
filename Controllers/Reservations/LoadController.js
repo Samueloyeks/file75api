@@ -328,4 +328,15 @@ exports.userReservations = catchAsync(async (req, res, next) => {
 
 });
 
+exports.markAsViewed = catchAsync(async (req, res, next) => {
+  const updatedReservation = await Reservation.updateOne({ _id: req.body._id },{$set: {"viewed": true} })
+
+  return res.status(200).json({
+    status: 'success',
+    data: {
+      updatedReservation
+    },
+  });
+});
+
 

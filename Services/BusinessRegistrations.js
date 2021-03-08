@@ -77,7 +77,7 @@ exports.getAllBusinessRegistrations = async (req) => {
 
     if (byUserId) query = query.find({ "user": byUserId });
 
-    if (byAdminId) {
+    if (byAdminId) { 
         const admin = await AdminService.getOne(byAdminId);
         const designations = admin.designations;
 

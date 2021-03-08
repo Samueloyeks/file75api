@@ -74,6 +74,7 @@ exports.getAllCompanyRegistrations = async (req) => {
         byCategorycode = null
     } = req.query;
 
+
     var query = CompanyRegistration.find();
 
     const skip = parseInt((page - 1) * perPage);

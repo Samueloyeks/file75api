@@ -1,9 +1,10 @@
 
 const mongoose = require('mongoose');
-const ObjectId =  mongoose.Types.ObjectId;
+const ObjectId = mongoose.Types.ObjectId;
 
 exports.users = [
     {
+        "id": "5f8f0bc011679030853cac49",
         "role": "admin",
         "type": "email",
         "verified": false,
@@ -19,6 +20,7 @@ exports.users = [
         "adminId": ObjectId("5f8f0bc011679030853cac4a")
     },
     {
+        "_id": "5f8f0bfd2f1c763095b72bfb",
         "role": "admin",
         "type": "email",
         "verified": false,
@@ -34,6 +36,7 @@ exports.users = [
         "adminId": ObjectId("5f8f0bfe2f1c763095b72bfc")
     },
     {
+        "_id": "5f9e609711b13000040b8934",
         "role": "user",
         "type": "email",
         "verified": false,

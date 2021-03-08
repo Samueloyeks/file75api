@@ -13,15 +13,14 @@ const users = require('./Database/Seeders/UserSeeder')
 const admins = require('./Database/Seeders/AdminSeeder')
 
 
-dotenv.config({ path: './config.env' });
+dotenv.config({ path: './.env' });
 
-let DB = process.env.DATABASE.replace(
+let DB = process.env.DATABASE_URL.replace(
     '<password>',
     process.env.DATABASE_PASSWORD
 );
 DB = DB.replace('<dbname>', process.env.DATABASE_NAME);
 
-// let DB = process.env.DATABASE_LOCAL;
 
 
 seeder.connect(DB, () => {

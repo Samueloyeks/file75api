@@ -352,6 +352,18 @@ exports.getNaturesOfBusiness = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.markAsViewed = catchAsync(async (req, res, next) => {
+  const updatedBusinessRegistration = await BusinessRegistration.updateOne({ _id: req.body._id },
+    { $set: { "viewed": true} })
+
+  return res.status(200).json({
+    status: 'success',
+    data: {
+      updatedBusinessRegistration
+    },
+  });
+});
+
 
 
 

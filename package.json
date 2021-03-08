@@ -5,10 +5,11 @@
   "main": "app.js",
   "scripts": {
     "seed": "node seeder.js",
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "dev": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "update-env": "gsutil -m cp -r tmp/deployment-files gs://file75api-deployment-files"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
     "express-fileupload": "^1.2.0",
     "express-mongo-sanitize": "^1.3.2",
     "express-rate-limit": "^3.5.0",
+    "forever": "^3.0.4",
     "generate-password": "^1.5.1",
     "helmet": "^3.16.0",
     "hpp": "^0.2.2",

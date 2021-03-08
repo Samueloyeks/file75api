@@ -48,5 +48,11 @@ router.post('/uploadImage/',
     authGuard.protect
 );
 
+router.put('/markAsViewed/:id',
+    BusinessRegistrationController.markAsViewed,
+    // authGuard.protect,
+    // adminGuard.isAdmin,
+)
+
 
 module.exports = router;

@@ -75,7 +75,7 @@ exports.getAllReservations = async (req) => {
         });
     }
 
-    if (associations.length > 0) {
+    if (associations.length > 0) { 
         for (const association of associations.split(',')) {
             query = query.populate(association)
         }
