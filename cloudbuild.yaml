@@ -15,7 +15,7 @@ steps:
   # Fetch environment variables from storage
   - name: gcr.io/cloud-builders/gsutil
     args:
-      [ 
+      [  
         "cp",
         "gs://file75api-deployment-files/deployment-files/${_ENV}.env",
         ".env",
