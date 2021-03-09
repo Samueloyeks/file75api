@@ -21,7 +21,7 @@ router.get(
   authGuard.protect,
   authController.getMe,
   authController.getUser
-);
+); 
 
 router.get('/_ah/start', authController.index)
 
