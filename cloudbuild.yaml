@@ -19,7 +19,7 @@ steps:
         "cp",
         "gs://file75api-deployment-files/deployment-files/${_ENV}.env",
         ".env",
-      ]
+      ] 
   # Fetch app.yaml from storage
   - name: gcr.io/cloud-builders/gsutil
     args:
