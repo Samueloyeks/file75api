@@ -21,8 +21,9 @@ router.get(
   authGuard.protect,
   authController.getMe,
   authController.getUser
-); 
+);
 
 router.get('/_ah/start', authController.index)
+router.get('/_ah/warmup', authController.index);
 
 module.exports = router;
