@@ -84,6 +84,7 @@ app.use((req, res, next) => {
 });
 
 // 3) Routes
+app.use('/', authRouter);
 app.use('/api/v1', authRouter);
 app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/reservation', ReservationRouter);
