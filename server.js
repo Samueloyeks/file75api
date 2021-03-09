@@ -30,7 +30,7 @@ DB = DB.replace('<dbname>', process.env.DATABASE_NAME);
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
-    useCreateIndex: true,
+    useCreateIndex: true, 
     useUnifiedTopology: true,
   })
   // eslint-disable-next-line no-console
