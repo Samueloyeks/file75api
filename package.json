@@ -16,7 +16,7 @@
     "url": "https://github.com/Mayorwa/Express-boilerplate.git"
   },
   "author": "Mayorwa",
-  "license": "ISC", 
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/Mayorwa/Express-boilerplate.git/issues"
   },
@@ -75,6 +75,6 @@
     "prettier": "^2.0.4"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": "^10.0.0"
   }
 }
