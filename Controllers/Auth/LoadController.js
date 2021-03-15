@@ -36,8 +36,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   const newUser = await userService.createUser(req.body);
 
-  const url = `${req.protocol}://${req.get('host')}/api/v1/verify/${req.body.slug
-    }`;
+  const url = `${req.protocol}://${req.get('host')}/api/v1/verify/${req.body.slug}`;
   await new Email(newUser, url).welcome();
 
   return userService.createSendToken(newUser, 201, res);
@@ -81,15 +80,13 @@ exports.facebookAuth = catchAsync(async (req, res, next) => {
   }
 
   req.body.type = 'facebook';
-  req.body.verified = true;
   req.body.slug =
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15);
 
   const newUser = await userService.createUser(req.body);
 
-  const url = `${req.protocol}://${req.get('host')}/api/v1/verify/${req.body.slug
-    }`;
+  const url = `${req.protocol}://${req.get('host')}/api/v1/verify/${req.body.slug}`;
   await new Email(newUser, url).welcome();
 
   return userService.createSendToken(newUser, 201, res);
@@ -115,15 +112,13 @@ exports.googleAuth = catchAsync(async (req, res, next) => {
   }
 
   req.body.type = 'google';
-  req.body.verified = true;
   req.body.slug =
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15);
 
   const newUser = await userService.createUser(req.body);
 
-  const url = `${req.protocol}://${req.get('host')}/api/v1/verify/${req.body.slug
-    }`;
+  const url = `${req.protocol}://${req.get('host')}/api/v1/verify/${req.body.slug}`;
   await new Email(newUser, url).welcome();
 
   return userService.createSendToken(newUser, 201, res);
