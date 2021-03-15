@@ -32,7 +32,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   if (user) {
     return next(new AppError('Email has been registered', 409));
-  } 
+  }  
 
   const newUser = await userService.createUser(req.body);
 
@@ -81,6 +81,7 @@ exports.facebookAuth = catchAsync(async (req, res, next) => {
   }
 
   req.body.type = 'facebook';
+  req.body.verified = true;
   req.body.slug =
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15);
@@ -114,6 +115,7 @@ exports.googleAuth = catchAsync(async (req, res, next) => {
   }
 
   req.body.type = 'google';
+  req.body.verified = true;
   req.body.slug =
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15);
